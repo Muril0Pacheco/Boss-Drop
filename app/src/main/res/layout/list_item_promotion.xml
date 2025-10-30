@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/gameImageView"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/gameTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/gameImageView"
+        app:layout_constraintTop_toTopOf="@id/gameImageView"
+        tools:text="Hollow Knight" />
+
+    <TextView
+        android:id="@+id/discountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/discount_border"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="4dp"
+        android:textColor="#555555"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/gameTitleTextView"
+        app:layout_constraintTop_toBottomOf="@id/gameTitleTextView"
+        tools:text="-76%" />
+
+    <TextView
+        android:id="@+id/newPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#DDDDDD"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="4dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/discountTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/discountTextView"
+        tools:text="R$59,90" />
+
+    <TextView
+        android:id="@+id/oldPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:foreground="?android:attr/listChoiceBackgroundIndicator"
+        android:textColor="#757575"
+        app:layout_constraintBottom_toTopOf="@id/newPriceTextView"
+        app:layout_constraintEnd_toEndOf="@id/newPriceTextView"
+        tools:text="R$249,99" />
+
+    <ImageView
+        android:id="@+id/storeLogoImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/newPriceTextView"
+        tools:src="@tools:sample/avatars" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="#E0E0E0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gameImageView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,68 @@
+<resources>
+    <!-- Tela inicial -->
+    <string name="app_name">BossDrop</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="forgot_password">Esqueci minha senha</string>
+    <string name="login">Login</string>
+    <string name="register">Cadastro</string>
+    <string name="app_logo_description">Logo do aplicativo com um controle de videogame e uma etiqueta de preço</string>
+
+    <!-- Cadastro -->
+    <string name="realize_seu_cadastro">Realize seu cadastro</string>
+    <string name="hint_username">Insira seu nome de usuário</string>
+    <string name="hint_create_password">Crie sua senha</string>
+    <string name="hint_repeat_password">Repita sua senha</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="already_have_account">Já possuo cadastro, Login</string>
+    <string name="profile_image_description">Imagem de perfil do usuário</string>
+
+    <!-- Enviar email para redefinir senha -->
+    <string name="redefinir_senha">Redefinir Senha</string>
+    <string name="insira_seu_email">Insira seu email:</string>
+    <string name="enviar_link">Enviar Link</string>
+
+    <!-- Cadastrar nova senha -->
+    <string name="criar_nova_senha">Criar nova Senha</string>
+    <string name="nova_senha">Nova senha:</string>
+    <string name="repita_a_senha">Repita a senha:</string>
+    <string name="confirmar">Confirmar</string>
+
+
+    <!-- Tela inicial -->
+    <string name="active_promotions">PROMOÇÕES ATIVAS</string>
+    <string name="menu_home">Início</string>
+    <string name="menu_search">Busca</string>
+    <string name="menu_favorites">Favoritos</string>
+    <string name="profile_icon">Perfil</string>
+
+    <!-- Favoritos -->
+    <string name="search_hint">teste</string>
+
+    <!-- Pesquisa -->
+    <string name="mais_buscados">Mais Buscados</string>
+    <string name="recomendados">Recomendados:</string>
+
+    <!-- Conta -->
+    <string name="conta">Conta</string>
+    <string name="username_placeholder">\@username</string>
+    <string name="alterar_nome_de_usuario">Alterar nome de usuário</string>
+    <string name="alterar_email">Alterar Email</string>
+    <string name="alterar_senha_action">Alterar Senha</string>
+    <string name="salvar">Salvar</string>
+
+    <!-- Notificações -->
+    <string name="notificacoes">Notificações</string>
+    <string name="ativar_desativar_push">Ativar/Desativar push</string>
+    <string name="ativar_desativar_email">Ativar/Desativar por Email</string>
+
+    <!-- Privacidade -->
+    <string name="privacidade">Privacidade</string>
+    <string name="termos_de_uso">Termos de Uso</string>
+
+    <!-- Ajuda -->
+    <string name="ajuda">Ajuda</string>
+    <string name="suporte">Suporte</string>
+    <string name="suporte_subtitulo">Entre em contato via email com o nosso suporte</string>
+
+</resources>
