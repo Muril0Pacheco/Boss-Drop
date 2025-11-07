@@ -69,9 +69,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/purple_secondary"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        app:itemActiveIndicator="@drawable/bottom_nav_indicator"
+        app:itemIconTint="@color/bottom_nav_tint_selector"
+        app:itemTextColor="@color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
