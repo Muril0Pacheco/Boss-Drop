@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/email"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="18dp"
         android:text="@string/login"
         android:textAllCaps="false"
         app:backgroundTint="@color/purple_primary"
@@ -88,7 +88,7 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="1dp"
         android:text="@string/register"
         android:textAllCaps="false"
         android:textColor="@color/purple_primary"
@@ -110,4 +110,30 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 
+    <TextView
+        android:id="@+id/dividerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="ou"
+        android:textColor="@color/text_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/googleSignInButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="4dp"
+        android:text="Login com uma conta Google"
+        android:textAllCaps="false"
+        android:textColor="@color/text_secondary"
+        app:cornerRadius="28dp" app:icon="@drawable/ic_google_g_logo"
+        app:iconPadding="16dp"
+        app:iconTint="@null" app:layout_constraintEnd_toEndOf="@id/registerButton"
+        app:layout_constraintStart_toStartOf="@id/registerButton"
+        app:layout_constraintTop_toBottomOf="@id/dividerTextView"
+        app:strokeColor="#E0E0E0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

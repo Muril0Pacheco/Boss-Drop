@@ -71,7 +71,6 @@
         android:background="@color/purple_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu"
-        app:itemActiveIndicator="@drawable/bottom_nav_indicator"
         app:itemIconTint="@color/bottom_nav_tint_selector"
         app:itemTextColor="@color/white"/>
 
