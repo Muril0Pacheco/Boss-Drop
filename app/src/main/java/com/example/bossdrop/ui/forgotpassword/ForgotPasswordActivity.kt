@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bossdrop.databinding.ActivityForgotPasswordBinding
+import com.example.bossdrop.ui.esconderTeclado
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
@@ -23,6 +24,10 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         setupObservers()
         setupClickListeners()
+
+        binding.forgotRootLayout.setOnClickListener {
+            esconderTeclado()
+        }
     }
 
     private fun setupObservers() {

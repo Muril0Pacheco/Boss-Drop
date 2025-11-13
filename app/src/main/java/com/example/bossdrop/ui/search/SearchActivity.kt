@@ -10,6 +10,7 @@ import com.example.bossdrop.R
 import com.example.bossdrop.adapter.SearchHistoryAdapter
 import com.example.bossdrop.adapter.RecommendedAdapter
 import com.example.bossdrop.databinding.ActivitySearchBinding
+import com.example.bossdrop.ui.esconderTeclado
 import com.example.bossdrop.ui.favorites.FavoritesActivity
 import com.example.bossdrop.ui.home.HomeActivity
 
@@ -22,6 +23,25 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.searchRootLayout.setOnClickListener {
+            esconderTeclado()
+        }
+
+        // 1. Listener para o conteúdo que rola (o LinearLayout)
+        binding.scrollableContentLayout.setOnClickListener {
+            esconderTeclado()
+        }
+
+        // 2. Listener para o RecyclerView (se clicar no fundo dele)
+        binding.searchHistoryRecyclerView.setOnClickListener {
+            esconderTeclado()
+        }
+
+        // 3. Listener para o outro RecyclerView
+        binding.recommendedRecyclerView.setOnClickListener {
+            esconderTeclado()
+        }
 
         setupObservers()
         setupBottomNavigation()

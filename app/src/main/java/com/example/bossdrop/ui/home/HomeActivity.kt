@@ -4,14 +4,16 @@ import android.content.Intent
 import com.example.bossdrop.R
 import com.example.bossdrop.ui.favorites.FavoritesActivity
 import com.example.bossdrop.ui.search.SearchActivity
+import com.example.bossdrop.ui.esconderTeclado
+import com.example.bossdrop.adapter.PromotionAdapter
+import com.example.bossdrop.databinding.ActivityHomeBinding
+import com.example.bossdrop.ui.settings.SettingsActivity
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bossdrop.adapter.PromotionAdapter
-import com.example.bossdrop.databinding.ActivityHomeBinding
+
 
 class HomeActivity : AppCompatActivity() {
 
@@ -26,16 +28,23 @@ class HomeActivity : AppCompatActivity() {
 
         setupRecyclerView()
         setupObservers()
+        setupBottomNavigation()
 
         // Clique do ícone de perfil (adicionado aqui)
         binding.profileIcon.setOnClickListener {
-            Toast.makeText(this, "Abrindo opções de conta...", Toast.LENGTH_SHORT).show()
-            // Exemplo para abrir telas configs: startActivity(Intent(this, ProfileActivity::class.java))
-        }
+            // 1. Cria a "intenção" de navegar para a SettingsActivity
+            val intent = Intent(this, SettingsActivity::class.java)
 
+            // 2. Inicia a nova tela
+            startActivity(intent)
+        }
 
         // Carrega os dados ao abrir a tela
         viewModel.loadPromotions()
+
+        binding.homeRootLayout.setOnClickListener {
+            esconderTeclado()
+        }
     }
 
     private fun setupRecyclerView() {

@@ -1,16 +1,23 @@
 package com.example.bossdrop.ui.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.bossdrop.R
-import com.example.bossdrop.databinding.ActivityLoginBinding
-import com.example.bossdrop.ui.home.HomeActivity
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
+
+import com.example.bossdrop.ui.register.RegisterActivity
+import com.example.bossdrop.ui.forgotpassword.ForgotPasswordActivity
+import com.example.bossdrop.R
+import com.example.bossdrop.databinding.ActivityLoginBinding
+import com.example.bossdrop.ui.esconderTeclado
+import com.example.bossdrop.ui.home.HomeActivity
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -34,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
         setupObservers()
         setupClickListeners()
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
@@ -45,7 +51,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun handleGoogleSignInResult(data: Intent?) {
         try {
             val credential = oneTapClient.getSignInCredentialFromIntent(data)
@@ -94,6 +99,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
+        binding.mainLayout.setOnClickListener {
+            esconderTeclado()
+        }
+
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
@@ -105,14 +114,15 @@ class LoginActivity : AppCompatActivity() {
 
         binding.registerButton.setOnClickListener {
             viewModel.goToRegister()
-            // TODO: Implementar navegação para tela de cadastro
-            Toast.makeText(this, "Abrindo tela de cadastro...", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
 
         binding.forgotPasswordTextView.setOnClickListener {
             viewModel.forgotPassword()
             // TODO: Implementar navegação para recuperação de senha
-            Toast.makeText(this, "Abrindo recuperação de senha...", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
         }
 
         binding.googleSignInButton.setOnClickListener {
@@ -162,7 +172,6 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.onGoogleSignInFailed("Falha ao iniciar login com Google: ${exception.message}")
             }
     }
-
     private fun navigateToHome() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
