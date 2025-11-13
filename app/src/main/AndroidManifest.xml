@@ -27,7 +27,47 @@
             android:name=".ui.home.HomeActivity"
             android:exported="false" />
 
-        <!-- Adicione outras atividades aqui -->
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.favorites.FavoritesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.privacy.PrivacyActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.notifications.NotificationsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.register.RegisterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.help.HelpActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.forgotpassword.ForgotPasswordActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.createnewpassword.CreateNewPasswordActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.account.AccountActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false" />
+
+
 
     </application>
 

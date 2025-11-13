@@ -39,11 +39,11 @@
     <string name="profile_icon">Perfil</string>
 
     <!-- Favoritos -->
-    <string name="search_hint">teste</string>
 
     <!-- Pesquisa -->
     <string name="mais_buscados">Mais Buscados</string>
     <string name="recomendados">Recomendados:</string>
+    <string name="search_hint">Pesquisar jogos...</string>
 
     <!-- Conta -->
     <string name="conta">Conta</string>

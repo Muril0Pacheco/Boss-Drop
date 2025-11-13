@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/homeRootLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -29,6 +30,8 @@
                 android:layout_marginEnd="66dp"
                 android:background="@drawable/rounded_edittext_background"
                 android:drawableEnd="@drawable/ic_search"
+                android:hint="@string/search_hint"
+
                 android:paddingStart="16dp"
                 android:paddingEnd="12dp" />
 
