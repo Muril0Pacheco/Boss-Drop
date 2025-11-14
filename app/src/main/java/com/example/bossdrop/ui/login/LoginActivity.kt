@@ -1,10 +1,8 @@
 package com.example.bossdrop.ui.login
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -120,7 +118,6 @@ class LoginActivity : AppCompatActivity() {
 
         binding.forgotPasswordTextView.setOnClickListener {
             viewModel.forgotPassword()
-            // TODO: Implementar navegação para recuperação de senha
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
