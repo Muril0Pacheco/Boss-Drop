@@ -10,6 +10,7 @@ import com.example.bossdrop.databinding.ActivityHomeBinding
 import com.example.bossdrop.ui.settings.SettingsActivity
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,8 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private val viewModel: HomeViewModel by viewModels()
-    private lateinit var adapter: PromotionAdapter
+    //private lateinit var adapter: PromotionAdapter
+    private val adapter: PromotionAdapter = PromotionAdapter(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         // Carrega os dados ao abrir a tela
-        viewModel.loadPromotions()
+        //viewModel.loadPromotions()
 
         binding.homeRootLayout.setOnClickListener {
             esconderTeclado()
@@ -48,15 +50,28 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = PromotionAdapter(emptyList())
+        //adapter = PromotionAdapter(emptyList())
         binding.promotionsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.promotionsRecyclerView.adapter = adapter
     }
 
     private fun setupObservers() {
         viewModel.promotions.observe(this) { promotions ->
-            adapter = PromotionAdapter(promotions)
-            binding.promotionsRecyclerView.adapter = adapter
+            //adapter = PromotionAdapter(promotions)
+            //binding.promotionsRecyclerView.adapter = adapter
+            adapter.updateList(promotions)
+        }
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                // Se estiver carregando, mostra o ProgressBar e esconde a lista
+                binding.promotionsRecyclerView.visibility = View.GONE
+                // (Assumindo que você tem um ProgressBar no seu XML com o id "progressBar")
+                // binding.progressBar.visibility = View.VISIBLE
+            } else {
+                // Se terminou, esconde o ProgressBar e mostra a lista
+                binding.promotionsRecyclerView.visibility = View.VISIBLE
+                // binding.progressBar.visibility = View.GONE
+            }
         }
     }
 
