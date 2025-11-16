@@ -67,5 +67,8 @@
     <string name="suporte">Suporte</string>
     <string name="suporte_subtitulo">Entre em contato via email com o nosso suporte</string>
 
+    <!-- Detalhes-Jogo -->
+    <string name="ir_para_promocao">IR PARA PROMOÇÃO</string>
+
 
 </resources>

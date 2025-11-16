@@ -20,7 +20,8 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private val viewModel: HomeViewModel by viewModels()
-    //private lateinit var adapter: PromotionAdapter
+
+    // O Adapter agora é inicializado com o tipo ItadPromotion
     private val adapter: PromotionAdapter = PromotionAdapter(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,17 +33,13 @@ class HomeActivity : AppCompatActivity() {
         setupObservers()
         setupBottomNavigation()
 
-        // Clique do ícone de perfil (adicionado aqui)
         binding.profileIcon.setOnClickListener {
-            // 1. Cria a "intenção" de navegar para a SettingsActivity
             val intent = Intent(this, SettingsActivity::class.java)
-
-            // 2. Inicia a nova tela
             startActivity(intent)
         }
 
-        // Carrega os dados ao abrir a tela
-        //viewModel.loadPromotions()
+        // Removemos o clique do searchEditText
+        // Vamos fazer isso na SearchActivity
 
         binding.homeRootLayout.setOnClickListener {
             esconderTeclado()
@@ -50,32 +47,41 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        //adapter = PromotionAdapter(emptyList())
         binding.promotionsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.promotionsRecyclerView.adapter = adapter
     }
 
     private fun setupObservers() {
+        // Observador de promoções (agora usa ItadPromotion)
         viewModel.promotions.observe(this) { promotions ->
-            //adapter = PromotionAdapter(promotions)
-            //binding.promotionsRecyclerView.adapter = adapter
+            // Atualiza a lista no adapter existente
             adapter.updateList(promotions)
         }
+
+        // Observador do Loading (agora usa o ID 'progressBar')
         viewModel.isLoading.observe(this) { isLoading ->
             if (isLoading) {
                 // Se estiver carregando, mostra o ProgressBar e esconde a lista
                 binding.promotionsRecyclerView.visibility = View.GONE
-                // (Assumindo que você tem um ProgressBar no seu XML com o id "progressBar")
-                // binding.progressBar.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE // ◀️ --- LÓGICA ATIVADA
             } else {
                 // Se terminou, esconde o ProgressBar e mostra a lista
                 binding.promotionsRecyclerView.visibility = View.VISIBLE
-                // binding.progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE // ◀️ --- LÓGICA ATIVADA
             }
         }
     }
 
     private fun setupBottomNavigation() {
+        // ◀️ --- LÓGICA DO SEARCH ATUALIZADA ---
+        // O clique no EditText vai direto para a SearchActivity
+        binding.searchEditText.isFocusable = false
+        binding.searchEditText.isClickable = true
+        binding.searchEditText.setOnClickListener {
+            startActivity(Intent(this, SearchActivity::class.java))
+            // finish() // Não finalize a Home, deixe o usuário voltar
+        }
+
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
@@ -84,19 +90,16 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.navigation_search -> {
                     startActivity(Intent(this, SearchActivity::class.java))
-                    finish()
+                    // finish() // Não finalize a Home, deixe o usuário voltar
                     true
                 }
                 R.id.navigation_favorites -> {
-                    // Navega para a tela de Favoritos
-                    val intent = Intent(this, FavoritesActivity::class.java)
-                    startActivity(intent)
-                    finish() // Fecha a tela atual
+                    startActivity(Intent(this, FavoritesActivity::class.java))
+                    // finish() // Não finalize a Home, deixe o usuário voltar
                     true
                 }
                 else -> false
             }
         }
     }
-
 }

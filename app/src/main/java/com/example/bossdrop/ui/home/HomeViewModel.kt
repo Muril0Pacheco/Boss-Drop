@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bossdrop.data.model.Deal // <-- IMPORT MUDOU
+import com.example.bossdrop.data.model.ItadPromotion // ◀️ -- IMPORT CORRIGIDO
 import com.example.bossdrop.data.repository.PromotionRepository
 import kotlinx.coroutines.launch
 
@@ -13,9 +13,9 @@ class HomeViewModel : ViewModel() {
 
     private val repository = PromotionRepository()
 
-    // 1. O LiveData agora usa o nosso novo model "Deal"
-    private val _promotions = MutableLiveData<List<Deal>>()
-    val promotions: LiveData<List<Deal>> = _promotions
+    // 1. O LiveData agora usa o nosso novo model "ItadPromotion"
+    private val _promotions = MutableLiveData<List<ItadPromotion>>()
+    val promotions: LiveData<List<ItadPromotion>> = _promotions
 
     // 2. Novo LiveData para controlar a exibição de um "loading"
     private val _isLoading = MutableLiveData<Boolean>()
@@ -27,7 +27,7 @@ class HomeViewModel : ViewModel() {
     }
 
     /**
-     * Busca as promoções da API.
+     * Busca as promoções do Firestore.
      * Usa o viewModelScope para fazer a chamada em uma Coroutine.
      */
     fun loadPromotions() {
@@ -37,8 +37,8 @@ class HomeViewModel : ViewModel() {
                 // Avisa a UI que estamos carregando
                 _isLoading.value = true
 
-                // 5. Chama a função SUSPENSA do repositório
-                val data = repository.getPromotionsFromApi()
+                // 5. Chama a função CORRETA do repositório (getPromotionsFromFirestore)
+                val data = repository.getPromotionsFromFirestore()
 
                 // 6. Posta os dados reais no LiveData
                 _promotions.value = data

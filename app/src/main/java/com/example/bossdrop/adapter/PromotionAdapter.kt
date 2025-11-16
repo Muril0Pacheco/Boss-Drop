@@ -1,16 +1,24 @@
 package com.example.bossdrop.adapter
 
+import android.content.Intent
 import android.graphics.Paint
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bossdrop.R
+import com.example.bossdrop.data.model.ItadPromotion // ◀️ --- IMPORT MUDOU
 import com.example.bossdrop.databinding.ListItemPromotionBinding
-import com.example.bossdrop.data.model.Deal // <-- IMPORT MUDOU
+import com.example.bossdrop.ui.detail.GameDetailActivity // ◀️ --- IMPORT NOVO
+import java.text.NumberFormat
+import java.util.Locale
 
 class PromotionAdapter(
-    private var deals: List<Deal> // <-- TIPO MUDOU
+    // ◀️ --- TIPO ALTERADO ---
+    private var promotions: List<ItadPromotion> = emptyList()
 ) : RecyclerView.Adapter<PromotionAdapter.PromotionViewHolder>() {
 
     inner class PromotionViewHolder(val binding: ListItemPromotionBinding) : RecyclerView.ViewHolder(binding.root)
@@ -20,58 +28,73 @@ class PromotionAdapter(
         return PromotionViewHolder(binding)
     }
 
-    override fun getItemCount() = deals.size
+    override fun getItemCount() = promotions.size
 
     override fun onBindViewHolder(holder: PromotionViewHolder, position: Int) {
-        val deal = deals[position] // <-- Agora é um objeto "Deal"
+        val promotion = promotions[position]
         val context = holder.itemView.context
 
+        // Formata os preços para BRL (ex: 55.0 -> "R$ 55,00")
+        val brlFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
+
         holder.binding.apply {
-            // 1. Preenche os textos com os dados da API
-            gameTitleTextView.text = deal.title
-            newPriceTextView.text = "R$ ${deal.salePrice}"  // Adiciona o "R$"
-            oldPriceTextView.text = "R$ ${deal.normalPrice}"
+            // Pega os dados dos sub-objetos (com segurança)
+            val title = promotion.title
+            val deal = promotion.deal
+            val assets = promotion.assets
+            val shopName = deal?.shop?.name
 
-            // 2. Formata o desconto (ex: "85.042521" -> "85%")
-            val discountPercent = deal.savings.substringBefore(".") + "%"
-            discountTextView.text = discountPercent
+            // Preenche a UI
+            gameTitleTextView.text = title
+            discountTextView.text = "-${deal?.cut}%"
+            newPriceTextView.text = brlFormat.format(deal?.price?.amount ?: 0.0)
+            oldPriceTextView.text = brlFormat.format(deal?.regular?.amount ?: 0.0)
 
-            // 3. Adiciona o efeito de texto riscado
+            // Adiciona o efeito de texto riscado
             oldPriceTextView.paintFlags = oldPriceTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
-            // 4. Carrega a IMAGEM DA INTERNET usando o Glide
+            // Usa o Glide para carregar a imagem da capa (boxart)
             Glide.with(context)
-                .load(deal.thumb) // A URL da imagem
-                .placeholder(R.drawable.ic_image_placeholder) // Um placeholder
-                .into(gameImageView) // Onde a imagem será exibida
+                .load(assets?.boxart)
+                .placeholder(R.drawable.ic_image_placeholder) // Placeholder
+                .into(gameImageView)
 
-            // 5. Define o logo da loja (exemplo simples)
-            val storeLogo = getStoreLogo(deal.storeID)
-            storeLogoImageView.setImageResource(storeLogo)
+            // Usa a função helper para definir o logo da loja
+            storeLogoImageView.setImageResource(getStoreLogo(shopName))
+
+            // Adiciona o clique para abrir a Tela de Detalhes
+            holder.itemView.setOnClickListener {
+                val intent = Intent(context, GameDetailActivity::class.java)
+                // O ID é crucial para a tela de detalhes buscar o jogo correto
+                intent.putExtra("GAME_ID", promotion.id)
+                context.startActivity(intent)
+            }
         }
     }
 
     /**
-     * Mapeia um ID de loja da API para um drawable local.
+     * Função para atualizar a lista do adapter.
      */
-    private fun getStoreLogo(storeID: String): Int {
-        return when (storeID) {
-            "1" -> R.drawable.steam_logo // Steam
-            "7" -> R.drawable.gog_logo // GOG
-            "8" -> R.drawable.origin_logo // Origin
-            "11" -> R.drawable.humble_store_logo // Humble Store
-            "15" -> R.drawable.fanatical_logo // Fanatical
-            "25" -> R.drawable.epic_games_logo // Epic Games
-            //Solução temporária, posteriormente as imagens virão via a API
-            else -> R.drawable.ic_image_placeholder // Um ícone genérico
-        }
+    fun updateList(newList: List<ItadPromotion>) { // ◀️ --- TIPO ALTERADO ---
+        promotions = newList
+        notifyDataSetChanged()
     }
 
     /**
-     * Função para atualizar a lista do adapter de forma eficiente.
+     * Helper para mapear o NOME da loja para um logo local.
      */
-    fun updateList(newList: List<Deal>) {
-        deals = newList
-        notifyDataSetChanged() // Avisa o RecyclerView para redesenhar
+    private fun getStoreLogo(shopName: String?): Int {
+        return when (shopName) {
+            "Steam" -> R.drawable.steam_logo
+            "GOG" -> R.drawable.gog_logo
+            "Ubisoft Store" -> R.drawable.ubisoft_store_logo
+            "Epic Game Store" -> R.drawable.epic_games_logo
+            "Fanatical" -> R.drawable.fanatical_logo
+            "Humble Store" -> R.drawable.humble_store_logo
+            "Green Man Gaming" -> R.drawable.gmg_logo
+            "Nuuvem" -> R.drawable.nuuvem_logo
+            // Adicione outros logos que você tiver
+            else -> R.drawable.ic_store_placeholder // Um ícone genérico
+        }
     }
 }
