@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/homeRootLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,12 +15,10 @@
         android:orientation="vertical"
         android:paddingBottom="16dp"
         app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_menu"
             app:title="">
 
             <EditText
@@ -29,6 +28,8 @@
                 android:layout_marginEnd="66dp"
                 android:background="@drawable/rounded_edittext_background"
                 android:drawableEnd="@drawable/ic_search"
+                android:hint="@string/search_hint"
+
                 android:paddingStart="16dp"
                 android:paddingEnd="12dp" />
 
@@ -43,7 +44,7 @@
                 android:src="@drawable/ic_person"
                 app:tint="@color/white"/>
 
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +55,6 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -67,15 +67,25 @@
         app:layout_constraintTop_toBottomOf="@id/headerLayout"
         tools:listitem="@layout/list_item_promotion" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        tools:visibility="visible" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/purple_secondary"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu"
-        tools:layout_editor_absoluteX="28dp" />
+        app:itemIconTint="@color/bottom_nav_tint_selector"
+        app:itemTextColor="@color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bossdrop.databinding.ActivityRegisterBinding
+import com.example.bossdrop.ui.esconderTeclado
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -19,6 +20,10 @@ class RegisterActivity : AppCompatActivity() {
 
         setupObservers()
         setupClickListeners()
+
+        binding.registerRootLayout.setOnClickListener {
+            esconderTeclado()
+        }
     }
 
     private fun setupObservers() {

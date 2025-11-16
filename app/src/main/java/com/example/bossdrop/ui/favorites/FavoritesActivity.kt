@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bossdrop.adapter.FavoritesAdapter
 import com.example.bossdrop.databinding.ActivityFavoritesBinding
+import com.example.bossdrop.ui.esconderTeclado
 import com.example.bossdrop.ui.home.HomeActivity
 import com.example.bossdrop.ui.search.SearchActivity
 
@@ -22,6 +23,10 @@ class FavoritesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoritesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.favoriteRootLayout.setOnClickListener {
+            esconderTeclado()
+        }
 
         setupRecyclerView()
         setupObservers()

@@ -1,6 +1,8 @@
 <resources>
     <!-- Tela inicial -->
     <string name="app_name">BossDrop</string>
+    <string name="default_web_client_id">954946754445-eg4q83qh0ui0i425knqpf9d2vqjocfn3.apps.googleusercontent.com</string>
+
     <string name="email">Email</string>
     <string name="password">Senha</string>
     <string name="forgot_password">Esqueci minha senha</string>
@@ -37,11 +39,11 @@
     <string name="profile_icon">Perfil</string>
 
     <!-- Favoritos -->
-    <string name="search_hint">teste</string>
 
     <!-- Pesquisa -->
     <string name="mais_buscados">Mais Buscados</string>
     <string name="recomendados">Recomendados:</string>
+    <string name="search_hint">Pesquisar jogos...</string>
 
     <!-- Conta -->
     <string name="conta">Conta</string>
@@ -64,5 +66,9 @@
     <string name="ajuda">Ajuda</string>
     <string name="suporte">Suporte</string>
     <string name="suporte_subtitulo">Entre em contato via email com o nosso suporte</string>
+
+    <!-- Detalhes-Jogo -->
+    <string name="ir_para_promocao">IR PARA PROMOÇÃO</string>
+
 
 </resources>

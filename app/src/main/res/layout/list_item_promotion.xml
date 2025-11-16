@@ -17,11 +17,11 @@
 
     <TextView
         android:id="@+id/gameTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="166dp"
+        android:layout_height="49dp"
         android:layout_marginStart="16dp"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/gameImageView"
         app:layout_constraintTop_toTopOf="@id/gameImageView"
