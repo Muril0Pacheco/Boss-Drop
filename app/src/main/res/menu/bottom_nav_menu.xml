@@ -7,5 +7,5 @@
         android:icon="@drawable/ic_search" android:title="@string/menu_search" />
     <item
         android:id="@+id/navigation_favorites"
-        android:icon="@drawable/ic_favorite" android:title="@string/menu_favorites" />
+        android:icon="@drawable/ic_favorite_border" android:title="@string/menu_favorites" />
 </menu>

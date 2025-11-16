@@ -47,7 +47,7 @@
         android:id="@+id/favoriteIcon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@drawable/ic_favorite"
+        android:src="@drawable/ic_favorite_border"
         app:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
