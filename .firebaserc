@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "appbossdrop"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }

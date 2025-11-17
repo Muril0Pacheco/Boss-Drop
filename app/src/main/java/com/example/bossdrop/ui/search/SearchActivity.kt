@@ -85,7 +85,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    // (NOVO) Configura o listener do "Enter" no teclado
     private fun setupSearchListener() {
         binding.searchEditText.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
