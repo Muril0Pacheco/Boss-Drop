@@ -2,6 +2,8 @@ package com.example.bossdrop.ui.register
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable // ◀️ --- IMPORT NECESSÁRIO
+import android.text.TextWatcher // ◀️ --- IMPORT NECESSÁRIO
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -22,64 +24,80 @@ class RegisterActivity : AppCompatActivity() {
 
         setupClickListeners()
         setupObservers()
+        setupTextWatchers()
+    }
+
+    private fun setupTextWatchers() {
+        // Um listener que limpa todos os erros
+        val errorCleaner = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.usernameInputLayout.error = null
+                binding.emailInputLayout.error = null
+                binding.passwordInputLayout.error = null
+                binding.repeatPasswordInputLayout.error = null
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        binding.usernameEditText.addTextChangedListener(errorCleaner)
+        binding.emailEditText.addTextChangedListener(errorCleaner)
+        binding.passwordEditText.addTextChangedListener(errorCleaner)
+        binding.repeatPasswordEditText.addTextChangedListener(errorCleaner)
     }
 
     private fun setupClickListeners() {
-        // Botão principal de cadastro
         binding.registerButton.setOnClickListener {
-            // Mapeando os IDs do XML: usernameEditText, emailEditText, etc.
-            val username = binding.usernameEditText.text.toString()
-            val email = binding.emailEditText.text.toString()
+            binding.emailInputLayout.error = null
+            binding.passwordInputLayout.error = null
+
+            val username = binding.usernameEditText.text.toString().trim()
+            val email = binding.emailEditText.text.toString().trim()
             val password = binding.passwordEditText.text.toString()
             val confirmPassword = binding.repeatPasswordEditText.text.toString()
 
             esconderTeclado()
-
-            // Adicione validação básica de UI antes de chamar o ViewModel, se necessário.
             viewModel.register(username, email, password, confirmPassword)
         }
 
-        // Botão de navegação para a tela de Login
         binding.loginButton.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
-
     }
 
     private fun setupObservers() {
-        // Observa o estado de carregamento
         viewModel.isLoading.observe(this) { isLoading ->
             if (isLoading) {
-                // Esconde o botão de cadastro e mostra o ProgressBar
                 binding.registerButton.visibility = View.GONE
                 binding.progressBar.visibility = View.VISIBLE
             } else {
-                // Mostra o botão de cadastro e esconde o ProgressBar
                 binding.registerButton.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.GONE
             }
-
-            // Desabilita o botão de redirect também
             binding.loginButton.isEnabled = !isLoading
         }
 
-        // Observa o sucesso do cadastro
-        viewModel.registrationSuccess.observe(this) { isSuccess ->
-            if (isSuccess == true) {
-                Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_LONG).show()
-                // Redireciona para a tela de login
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-        }
-
-        // Observa mensagens de erro
-        viewModel.errorMessage.observe(this) { message ->
-            if (!message.isNullOrEmpty()) {
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        viewModel.registrationResult.observe(this) { (resultType, message) ->
+            when (resultType) {
+                RegisterResultType.SUCCESS -> {
+                    Toast.makeText(this, "Cadastro realizado com sucesso! Faça login.", Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                RegisterResultType.ERROR_WEAK_PASSWORD -> {
+                    // Mostra o erro no campo de senha
+                    binding.passwordInputLayout.error = message ?: "Senha inválida"
+                }
+                RegisterResultType.ERROR_EMAIL_IN_USE -> {
+                    // Mostra o erro no campo de email
+                    binding.emailInputLayout.error = "Este e-mail já está em uso"
+                }
+                RegisterResultType.ERROR_GENERIC -> {
+                    Toast.makeText(this, message ?: "Erro desconhecido", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

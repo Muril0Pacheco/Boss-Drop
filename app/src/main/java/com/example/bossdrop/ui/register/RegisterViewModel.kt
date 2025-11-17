@@ -4,50 +4,61 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bossdrop.data.repository.RegisterEmailInUseException
+import com.example.bossdrop.data.repository.RegisterGenericException
 import com.example.bossdrop.data.repository.RegisterRepository
+import com.example.bossdrop.data.repository.RegisterWeakPasswordException
 import kotlinx.coroutines.launch
+
+enum class RegisterResultType {
+    SUCCESS,
+    ERROR_WEAK_PASSWORD,
+    ERROR_EMAIL_IN_USE,
+    ERROR_GENERIC
+}
 
 class RegisterViewModel : ViewModel() {
 
     private val repository = RegisterRepository()
 
-    // Controla o estado de Loading (mostra/esconde ProgressBar)
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    // Sinaliza quando o cadastro foi concluído com sucesso
-    private val _registrationSuccess = MutableLiveData<Boolean>()
-    val registrationSuccess: LiveData<Boolean> = _registrationSuccess
+    private val _registrationResult = MutableLiveData<Pair<RegisterResultType, String?>>()
+    val registrationResult: LiveData<Pair<RegisterResultType, String?>> = _registrationResult
 
-    // Sinaliza se houve um erro (ex: "e-mail já em uso")
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> = _errorMessage
-
-    /**
-     * Inicia o processo de cadastro chamando o Repositório.
-     */
     fun register(username: String, email: String, password: String, confirmPassword: String) {
-        // Validação básica do lado do ViewModel
+
         if (password != confirmPassword) {
-            _errorMessage.value = "As senhas não coincidem."
+            // Erro de UI: Senhas não coincidem
+            _registrationResult.value = Pair(RegisterResultType.ERROR_WEAK_PASSWORD, "As senhas não coincidem")
+            return
+        }
+        if (password.length < 6) {
+            // Erro de UI: Validação local (nem tenta ir ao Firebase)
+            _registrationResult.value = Pair(RegisterResultType.ERROR_WEAK_PASSWORD, "A senha deve ter pelo menos 6 caracteres")
             return
         }
 
         _isLoading.value = true
-        _errorMessage.value = ""
 
         viewModelScope.launch {
-            val success = repository.registerUser(username, email, password)
+            try {
+                repository.registerUser(username, email, password)
+                _registrationResult.value = Pair(RegisterResultType.SUCCESS, null)
 
-            if (success) {
-                _registrationSuccess.value = true
-            } else {
-                // Aqui podemos adicionar lógica para mensagens de erro específicas do Firebase.
-                // Por enquanto, enviamos uma mensagem genérica de falha no servidor.
-                _errorMessage.value = "Falha ao realizar o cadastro. Tente um e-mail diferente."
+            } catch (e: RegisterWeakPasswordException) {
+                _registrationResult.value = Pair(RegisterResultType.ERROR_WEAK_PASSWORD, e.message)
+
+            } catch (e: RegisterEmailInUseException) {
+                _registrationResult.value = Pair(RegisterResultType.ERROR_EMAIL_IN_USE, null)
+
+            } catch (e: RegisterGenericException) {
+                _registrationResult.value = Pair(RegisterResultType.ERROR_GENERIC, e.message)
+
+            } finally {
+                _isLoading.value = false
             }
-
-            _isLoading.value = false
         }
     }
 }
