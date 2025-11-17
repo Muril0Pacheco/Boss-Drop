@@ -3,9 +3,6 @@ package com.example.bossdrop.data.model
 import com.google.firebase.firestore.PropertyName
 
 /**
- * ESTE É O NOSSO MODELO V3 ATUALIZADO.
- * Ele representa um documento da coleção "promocoes_br_v3".
- *
  * Importante: O Firestore (com KTX) precisa de um construtor vazio,
  * por isso damos valores padrão (como = "" ou = null) para tudo.
  */

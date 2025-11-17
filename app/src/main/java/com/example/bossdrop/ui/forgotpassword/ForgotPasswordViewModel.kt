@@ -13,7 +13,6 @@ class ForgotPasswordViewModel : ViewModel() {
         if (email.isEmpty()) {
             _statusMessage.value = "Por favor, insira seu email."
         } else {
-            // Aqui você pode chamar Firebase Auth ou sua API
             _statusMessage.value = "Link enviado para $email"
         }
     }

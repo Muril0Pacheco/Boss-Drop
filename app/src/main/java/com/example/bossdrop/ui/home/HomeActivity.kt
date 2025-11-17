@@ -21,7 +21,6 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private val viewModel: HomeViewModel by viewModels()
 
-    // O Adapter agora é inicializado com o tipo ItadPromotion
     private val adapter: PromotionAdapter = PromotionAdapter(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +37,6 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Removemos o clique do searchEditText
-        // Vamos fazer isso na SearchActivity
 
         binding.homeRootLayout.setOnClickListener {
             esconderTeclado()
@@ -63,23 +60,21 @@ class HomeActivity : AppCompatActivity() {
             if (isLoading) {
                 // Se estiver carregando, mostra o ProgressBar e esconde a lista
                 binding.promotionsRecyclerView.visibility = View.GONE
-                binding.progressBar.visibility = View.VISIBLE // ◀️ --- LÓGICA ATIVADA
+                binding.progressBar.visibility = View.VISIBLE
             } else {
                 // Se terminou, esconde o ProgressBar e mostra a lista
                 binding.promotionsRecyclerView.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.GONE // ◀️ --- LÓGICA ATIVADA
+                binding.progressBar.visibility = View.GONE
             }
         }
     }
 
     private fun setupBottomNavigation() {
-        // ◀️ --- LÓGICA DO SEARCH ATUALIZADA ---
         // O clique no EditText vai direto para a SearchActivity
         binding.searchEditText.isFocusable = false
         binding.searchEditText.isClickable = true
         binding.searchEditText.setOnClickListener {
             startActivity(Intent(this, SearchActivity::class.java))
-            // finish() // Não finalize a Home, deixe o usuário voltar
         }
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
