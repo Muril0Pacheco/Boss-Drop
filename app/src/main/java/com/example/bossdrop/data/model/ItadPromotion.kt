@@ -10,6 +10,7 @@ data class ItadPromotion(
     @get:PropertyName("id") val id: String = "",
     @get:PropertyName("title") val title: String = "",
     @get:PropertyName("slug") val slug: String = "",
+    @get:PropertyName("popularityRank") val popularityRank: Int? = null,
     @get:PropertyName("assets") val assets: ItadAssets? = null,
     @get:PropertyName("deal") val deal: ItadDealInfo? = null
 )

@@ -68,4 +68,6 @@
     <string name="ir_para_promocao">IR PARA PROMOÇÃO</string>
 
 
+    <!-- Filtro -->
+    <string name="filter_icon">Filtros</string>
 </resources>

@@ -8,12 +8,16 @@ import com.example.bossdrop.ui.esconderTeclado
 import com.example.bossdrop.adapter.PromotionAdapter
 import com.example.bossdrop.databinding.ActivityHomeBinding
 import com.example.bossdrop.ui.settings.SettingsActivity
+import com.example.bossdrop.ui.home.HomeViewModel.FilterType
+import android.widget.Button
 
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class HomeActivity : AppCompatActivity() {
@@ -30,6 +34,7 @@ class HomeActivity : AppCompatActivity() {
 
         setupRecyclerView()
         setupObservers()
+        setupClickListeners()
         setupBottomNavigation()
 
         binding.profileIcon.setOnClickListener {
@@ -41,6 +46,48 @@ class HomeActivity : AppCompatActivity() {
         binding.homeRootLayout.setOnClickListener {
             esconderTeclado()
         }
+    }
+
+    private fun setupClickListeners() {
+        binding.profileIcon.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
+        // NOVO: Listener do ícone de filtro
+        binding.filterIcon.setOnClickListener {
+            showFilterDialog()
+        }
+    }
+
+    private fun showFilterDialog() {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_filter, null)
+        dialog.setContentView(view)
+
+        // Encontra as views no layout do BottomSheet
+        val radioGroup = view.findViewById<RadioGroup>(R.id.filterRadioGroup)
+        val btnApply = view.findViewById<Button>(R.id.applyButton)
+
+        btnApply.setOnClickListener {
+            val selectedId = radioGroup.checkedRadioButtonId
+
+            // Mapeia o ID do RadioButton selecionado para o Enum FilterType
+            val filterType = when (selectedId) {
+                R.id.rbDefault -> HomeViewModel.FilterType.RECENT // MUDOU DE DEFAULT PARA RECENT
+                R.id.rbLowestPrice -> HomeViewModel.FilterType.LOWEST_PRICE
+                R.id.rbHighestDiscount -> HomeViewModel.FilterType.HIGHEST_DISCOUNT
+                R.id.rbMostPopular -> HomeViewModel.FilterType.MOST_POPULAR
+                else -> HomeViewModel.FilterType.RECENT // MUDOU DE DEFAULT PARA RECENT
+            }
+
+            // Chama a lógica de filtro no ViewModel
+            viewModel.applyFilter(filterType)
+
+            dialog.dismiss() // Fecha o menu
+        }
+
+        dialog.show()
     }
 
     private fun setupRecyclerView() {

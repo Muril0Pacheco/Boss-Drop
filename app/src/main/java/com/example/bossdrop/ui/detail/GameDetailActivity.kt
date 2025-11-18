@@ -65,7 +65,6 @@ class GameDetailActivity : AppCompatActivity() {
         }
 
         binding.favoriteButton.setOnClickListener {
-            // Modificado: Remove o Toast e chama o ViewModel
             viewModel.toggleFavorite()
         }
     }
@@ -92,11 +91,25 @@ class GameDetailActivity : AppCompatActivity() {
             // Formata os preços para BRL
             val brlFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
 
-            binding.discountedPrice.text = brlFormat.format(dealInfo?.price?.amount ?: 0.0)
+            val newPriceAmount = dealInfo?.price?.amount ?: 0.0
+            val oldPriceAmount = dealInfo?.regular?.amount ?: 0.0
 
-            binding.originalPrice.text = brlFormat.format(dealInfo?.regular?.amount ?: 0.0)
-            binding.originalPrice.paintFlags = binding.originalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+// 1. Preço Novo (com "Grátis")
+            binding.discountedPrice.text = if (newPriceAmount == 0.0) {
+                "Grátis"
+            } else {
+                brlFormat.format(newPriceAmount)
+            }
 
+// 2. Preço Antigo (com strikethrough)
+            if (oldPriceAmount == 0.0 || oldPriceAmount == newPriceAmount) {
+                // Esconde se o preço antigo for 0 ou se não houver desconto
+                binding.originalPrice.visibility = View.GONE
+            } else {
+                binding.originalPrice.visibility = View.VISIBLE
+                binding.originalPrice.text = brlFormat.format(oldPriceAmount)
+                binding.originalPrice.paintFlags = binding.originalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            }
             // Carrega a imagem do header
             Glide.with(this)
                 .load(gameInfo.assets?.boxart ?: gameInfo.assets?.banner600)
@@ -121,6 +134,7 @@ class GameDetailActivity : AppCompatActivity() {
             "EA App" -> R.drawable.ea_app_logo
             "Green Man Gaming" -> R.drawable.gmg_logo
             "Nuuvem" -> R.drawable.nuuvem_logo
+            "Microsoft Store" -> R.drawable.microsoft_logo
             else -> R.drawable.ic_store_placeholder
         }
     }

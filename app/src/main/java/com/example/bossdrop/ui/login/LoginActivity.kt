@@ -104,7 +104,7 @@ class LoginActivity : AppCompatActivity() {
             binding.forgotPasswordTextView.isEnabled = !loading
 
             if (loading) {
-                esconderTeclado() // ◀️ --- ADICIONADO AQUI ---
+                esconderTeclado()
             }
         }
 
