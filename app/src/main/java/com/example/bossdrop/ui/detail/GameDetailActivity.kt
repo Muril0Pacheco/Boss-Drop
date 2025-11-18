@@ -40,7 +40,7 @@ class GameDetailActivity : AppCompatActivity() {
         setupClickListeners()
         setupObservers()
 
-        viewModel.loadDetailsFromFirestore(gameID!!)
+        viewModel.loadDetails(gameID!!)
     }
     private fun setupClickListeners() {
         binding.backButton.setOnClickListener {
@@ -65,8 +65,8 @@ class GameDetailActivity : AppCompatActivity() {
         }
 
         binding.favoriteButton.setOnClickListener {
-            // TODO: Adicionar lógica do Firestore aqui
-            Toast.makeText(this, "Lógica de Favorito (Firestore) ainda não implementada.", Toast.LENGTH_SHORT).show()
+            // Modificado: Remove o Toast e chama o ViewModel
+            viewModel.toggleFavorite()
         }
     }
 
@@ -106,6 +106,9 @@ class GameDetailActivity : AppCompatActivity() {
             // Define o logo da loja
             binding.storeLogo.setImageResource(getStoreLogo(dealInfo?.shop?.name))
         }
+        viewModel.isFavorite.observe(this) { isFavorite ->
+            updateFavoriteIcon(isFavorite)
+        }
     }
 
     private fun getStoreLogo(shopName: String?): Int {
@@ -119,6 +122,14 @@ class GameDetailActivity : AppCompatActivity() {
             "Green Man Gaming" -> R.drawable.gmg_logo
             "Nuuvem" -> R.drawable.nuuvem_logo
             else -> R.drawable.ic_store_placeholder
+        }
+    }
+
+    private fun updateFavoriteIcon(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.favoriteButton.setImageResource(R.drawable.ic_favorite_filled)
+        } else {
+            binding.favoriteButton.setImageResource(R.drawable.ic_favorite_border)
         }
     }
 }
