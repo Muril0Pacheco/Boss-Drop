@@ -46,13 +46,35 @@ class PromotionAdapter(
 
             // Preenche a UI
             gameTitleTextView.text = title
-            discountTextView.text = "-${deal?.cut}%"
-            newPriceTextView.text = brlFormat.format(deal?.price?.amount ?: 0.0)
-            oldPriceTextView.text = brlFormat.format(deal?.regular?.amount ?: 0.0)
+            val newPriceAmount = deal?.price?.amount ?: 0.0
+            val oldPriceAmount = deal?.regular?.amount ?: 0.0
+            val discountPercent = deal?.cut ?: 0
 
-            // Adiciona o efeito de texto riscado
-            oldPriceTextView.paintFlags = oldPriceTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+// 1. Preço Novo
+            newPriceTextView.text = if (newPriceAmount == 0.0) {
+                "Grátis"
+            } else {
+                brlFormat.format(newPriceAmount)
+            }
 
+// 2. Preço Antigo (com strikethrough)
+            if (oldPriceAmount == 0.0 || oldPriceAmount == newPriceAmount) {
+                // Esconde se o preço antigo for 0 ou se não houver desconto
+                oldPriceTextView.visibility = View.GONE
+            } else {
+                oldPriceTextView.visibility = View.VISIBLE
+                oldPriceTextView.text = brlFormat.format(oldPriceAmount)
+                oldPriceTextView.paintFlags = oldPriceTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            }
+
+// 3. Desconto
+            if (discountPercent == 0) {
+                // Esconde o " -0% "
+                discountTextView.visibility = View.GONE
+            } else {
+                discountTextView.visibility = View.VISIBLE
+                discountTextView.text = "-$discountPercent%"
+            }
             // Usa o Glide para carregar a imagem da capa (boxart)
             Glide.with(context)
                 .load(assets?.boxart)
@@ -89,10 +111,11 @@ class PromotionAdapter(
             "GOG" -> R.drawable.gog_logo
             "Ubisoft Store" -> R.drawable.ubisoft_store_logo
             "Epic Game Store" -> R.drawable.epic_games_logo
-            "Fanatical" -> R.drawable.fanatical_logo
-            "Humble Store" -> R.drawable.humble_store_logo
+            "Origin" -> R.drawable.origin_logo
+            "EA App" -> R.drawable.ea_app_logo
             "Green Man Gaming" -> R.drawable.gmg_logo
             "Nuuvem" -> R.drawable.nuuvem_logo
+            "Microsoft Store" -> R.drawable.microsoft_logo
             // Adicione outros logos que você tiver
             else -> R.drawable.ic_store_placeholder // Um ícone genérico
         }

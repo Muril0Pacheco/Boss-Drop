@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:background="@color/purple_primary">
+
+    <TextView
+        android:id="@+id/filterTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filtrar Jogos"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <RadioGroup
+        android:id="@+id/filterRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/filterTitle">
+
+        <RadioButton
+            android:id="@+id/rbDefault"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Recentes"  android:textColor="@color/white"
+            android:buttonTint="@color/purple_secondary"
+            android:checked="false"/> <RadioButton
+            android:id="@+id/rbLowestPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Menor Preço"
+            android:textColor="@color/white"
+            android:buttonTint="@color/purple_secondary"/>
+
+        <RadioButton
+            android:id="@+id/rbHighestDiscount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Maior Desconto (%)"
+            android:textColor="@color/white"
+            android:buttonTint="@color/purple_secondary"/>
+
+        <RadioButton
+            android:id="@+id/rbMostPopular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mais Populares"
+            android:textColor="@color/white"
+            android:buttonTint="@color/purple_secondary"
+            android:checked="true"/>
+    </RadioGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/applyButton"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="Aplicar Filtros"
+        android:layout_marginTop="24dp"
+        app:cornerRadius="12dp"
+        android:backgroundTint="@color/purple_secondary"
+        app:layout_constraintTop_toBottomOf="@id/filterRadioGroup"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
