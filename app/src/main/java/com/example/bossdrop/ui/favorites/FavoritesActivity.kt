@@ -4,6 +4,7 @@ import com.example.bossdrop.R
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bossdrop.adapter.FavoritesAdapter
@@ -34,7 +35,13 @@ class FavoritesActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = FavoritesAdapter(emptyList())
+        adapter = FavoritesAdapter(emptyList()) { gameId ->
+            val intent = Intent(this, com.example.bossdrop.ui.detail.GameDetailActivity::class.java)
+            intent.putExtra("GAME_ID", gameId)
+            startActivity(intent)
+        }
+
+
         binding.favoritesRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.favoritesRecyclerView.adapter = adapter
     }
@@ -42,6 +49,11 @@ class FavoritesActivity : AppCompatActivity() {
     private fun setupObservers() {
         viewModel.favorites.observe(this) { list ->
             adapter.updateList(list)
+        }
+
+        // Novo: Observer para o carregamento
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
     }
 

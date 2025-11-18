@@ -6,17 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:background="@color/purple_primary">
-
-    <ImageView
-        android:id="@+id/gameImageView"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:src="@tools:sample/avatars"/>
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/rounded_transparent_background"> <ImageView
+    android:id="@+id/gameImageView"
+    android:layout_width="80dp"
+    android:layout_height="100dp"
+    android:scaleType="centerCrop"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    tools:src="@tools:sample/avatars"/>
 
     <TextView
         android:id="@+id/gameTitleTextView"
@@ -33,7 +35,7 @@
 
     <TextView
         android:id="@+id/gamePriceTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="R$ 29,90"
         android:textColor="@color/white"
@@ -41,15 +43,32 @@
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@id/gameImageView"
         app:layout_constraintTop_toBottomOf="@id/gameTitleTextView"
-        app:layout_constraintEnd_toStartOf="@id/favoriteIcon"/>
+        />
+
+    <TextView
+        android:id="@+id/gameDiscountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@color/purple_primary"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBaseline_toBaselineOf="@id/gamePriceTextView"
+        app:layout_constraintStart_toEndOf="@id/gamePriceTextView"
+        tools:text="-50%"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/favoriteIcon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@drawable/ic_favorite_border"
-        app:tint="@color/white"
+        android:src="@drawable/ic_favorite_filled" app:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
