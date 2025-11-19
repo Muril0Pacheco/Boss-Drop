@@ -41,12 +41,11 @@ class HelpActivity : AppCompatActivity() {
     }
 
     private fun sendSupportEmail() {
-        // TODO: Substitua pelo seu email de suporte e um assunto padrão
-        val supportEmail = "suporte@meuapp.com"
-        val subject = "Ajuda com o App de Promoções"
+        val supportEmail = "bossdropapp@gmail.com"
+        val subject = "Ajuda com o App BossDrop"
 
         val intent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:") // Apenas apps de email devem lidar com isso
+            data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(supportEmail))
             putExtra(Intent.EXTRA_SUBJECT, subject)
         }

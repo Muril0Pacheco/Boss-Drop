@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bossdrop.data.repository.UserRepository // ◀️ NOVO REPOSITÓRIO
+import com.example.bossdrop.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
 // Enum para comunicar eventos de navegação para a Activity

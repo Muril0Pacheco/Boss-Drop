@@ -21,14 +21,12 @@ class RegisterRepository {
      * Tenta registrar o usuário.
      * Lança exceções específicas em caso de falha.
      */
-    suspend fun registerUser(username: String, email: String, password: String) { // ◀️ --- REMOVIDO: Boolean
+    suspend fun registerUser(username: String, email: String, password: String) {
         try {
-            // 1. Tenta criar o usuário no Firebase Auth
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
             val firebaseUser = authResult.user
 
             if (firebaseUser != null) {
-                // 2. Cria o novo objeto User
                 val newUser = User(
                     uid = firebaseUser.uid,
                     username = username,
@@ -37,7 +35,6 @@ class RegisterRepository {
                     favoriteGameIds = emptyList()
                 )
 
-                // 3. Salva o documento User no Firestore
                 usersCollection.document(firebaseUser.uid).set(newUser).await()
                 Log.d("RegisterRepo", "Usuário ${firebaseUser.uid} registrado.")
             } else {

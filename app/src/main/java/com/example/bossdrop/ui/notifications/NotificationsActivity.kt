@@ -21,7 +21,6 @@ class NotificationsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         setupListeners()
-        setupBottomNavigation()
     }
 
     // Gerencia o clique no botão de voltar da toolbar
@@ -49,11 +48,4 @@ class NotificationsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupBottomNavigation() {
-        // Configure a navegação inferior como nas outras telas, se necessário
-        binding.bottomNavigation.setOnItemSelectedListener {
-            // ... lógica de navegação
-            true
-        }
-    }
 }
