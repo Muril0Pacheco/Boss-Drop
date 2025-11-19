@@ -2,7 +2,7 @@ package com.example.bossdrop.ui.forgotpassword
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View // ◀️ --- IMPORT NECESSÁRIO
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity

@@ -61,7 +61,6 @@ class FavoriteRepository {
 
         return try {
             val document = usersCollection.document(uid).get().await()
-            // Assumimos que o campo é salvo como List<String>
             (document.get("favoriteGameIds") as? List<String>) ?: emptyList()
         } catch (e: Exception) {
             Log.e("FavoriteRepository", "Erro ao buscar lista de favoritos: ${e.message}")

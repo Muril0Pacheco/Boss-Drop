@@ -2,12 +2,10 @@ package com.example.bossdrop.data.repository
 
 import android.util.Log
 import com.example.bossdrop.data.model.User
-import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
 
 class LoginRepository {
 

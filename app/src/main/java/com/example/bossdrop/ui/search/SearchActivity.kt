@@ -10,8 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bossdrop.R
-// ◀️ --- SearchHistoryAdapter REMOVIDO ---
-import com.example.bossdrop.adapter.RecommendedAdapter // <-- Adapter correto
+import com.example.bossdrop.adapter.RecommendedAdapter
 import com.example.bossdrop.databinding.ActivitySearchBinding
 import com.example.bossdrop.ui.esconderTeclado
 import com.example.bossdrop.ui.favorites.FavoritesActivity
@@ -87,17 +86,22 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setupSearchListener() {
         binding.searchEditText.setOnEditorActionListener { textView, actionId, _ ->
+            val query = textView.text.toString()
+
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val query = textView.text.toString()
                 esconderTeclado()
-                viewModel.searchForGame(query) // Chama a busca no ViewModel
+                viewModel.searchForGame(query)
                 return@setOnEditorActionListener true
             }
+
+            if (query.isBlank()) {
+                viewModel.searchForGame(query)
+            }
+
             return@setOnEditorActionListener false
         }
     }
 
-    // (NOVO) Foca no EditText e abre o teclado ao entrar na tela
     private fun setupSearchFocus() {
         binding.searchEditText.requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
