@@ -13,16 +13,24 @@
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_arrow_back"
-        app:title="@string/notificacoes"
-        app:titleTextColor="@color/black"
-        app:navigationIconTint="@color/black" />
+        app:navigationIconTint="@color/black">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/notificacoes"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <TextView
         android:id="@+id/pushNotificationLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:text="@string/ativar_desativar_push"
         android:textColor="@color/black"
         android:textSize="16sp"
@@ -70,15 +78,5 @@
         app:layout_constraintBottom_toBottomOf="@id/emailNotificationLabel"
         app:layout_constraintEnd_toEndOf="@id/pushNotificationSwitch"
         app:layout_constraintTop_toTopOf="@id/emailNotificationLabel" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/purple_secondary"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
