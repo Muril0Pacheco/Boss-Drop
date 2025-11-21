@@ -11,7 +11,7 @@ import com.example.bossdrop.databinding.ListItemFavoriteBinding
 
 class FavoritesAdapter(
     private var favoriteItems: List<FavoriteItem>,
-    private val onItemClick: (String) -> Unit
+    private val onItemClick: (FavoriteItem) -> Unit
 ) :
     RecyclerView.Adapter<FavoritesAdapter.FavoriteViewHolder>() {
 
@@ -46,7 +46,7 @@ class FavoritesAdapter(
         }
 
         holder.itemView.setOnClickListener {
-            onItemClick(favorite.gameId)
+            onItemClick(favorite)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.bossdrop.data.repository
 
 import android.util.Log
+import com.example.bossdrop.data.model.FavoriteItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,41 +11,60 @@ class FavoriteRepository {
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
-    private val usersCollection = db.collection("users")
 
     /**
-     * Adiciona um ID de jogo à lista de favoritos do usuário logado.
+     * Adiciona aos favoritos (Visual + Robô)
      */
-    suspend fun addToFavorites(gameId: String): Boolean {
-        val uid = auth.currentUser?.uid
-        if (uid == null) {
-            Log.w("FavoriteRepository", "Usuário não logado. Falha ao adicionar favorito.")
-            return false
-        }
+    suspend fun addToFavorites(gameId: String, title: String, imageUrl: String?): Boolean {
+        val uid = auth.currentUser?.uid ?: return false
+
+        val favoriteData = hashMapOf(
+            "gameId" to gameId,
+            "gameTitle" to title,
+            "gameImageUrl" to imageUrl
+        )
 
         return try {
-            usersCollection.document(uid).update("favoriteGameIds", FieldValue.arrayUnion(gameId)).await()
-            Log.d("FavoriteRepository", "Jogo $gameId adicionado aos favoritos.")
+                db.collection("users").document(uid)
+                .collection("wishlist")
+                .document(gameId)
+                .set(favoriteData)
+                .await()
+
+            val arrayUpdate = hashMapOf(
+                "favoriteGameIds" to FieldValue.arrayUnion(gameId)
+            )
+
+            db.collection("users").document(uid)
+                .set(arrayUpdate, com.google.firebase.firestore.SetOptions.merge())
+                .await()
+
             true
         } catch (e: Exception) {
-            Log.e("FavoriteRepository", "Erro ao adicionar favorito: ${e.message}")
+            Log.e("FavoriteRepository", "Erro ao salvar: ${e.message}")
             false
         }
     }
 
     /**
-     * Remove um ID de jogo da lista de favoritos do usuário logado.
+     * Remove dos favoritos (Visual + Robô)
      */
     suspend fun removeFromFavorites(gameId: String): Boolean {
-        val uid = auth.currentUser?.uid
-        if (uid == null) {
-            Log.w("FavoriteRepository", "Usuário não logado. Falha ao remover favorito.")
-            return false
-        }
+        val uid = auth.currentUser?.uid ?: return false
 
         return try {
-            usersCollection.document(uid).update("favoriteGameIds", FieldValue.arrayRemove(gameId)).await()
-            Log.d("FavoriteRepository", "Jogo $gameId removido dos favoritos.")
+            // 1. Remove da SUB-COLEÇÃO 'wishlist'
+            db.collection("users").document(uid)
+                .collection("wishlist")
+                .document(gameId)
+                .delete()
+
+            // 2. Remove do ARRAY 'favoriteGameIds'
+            db.collection("users").document(uid)
+                .update("favoriteGameIds", FieldValue.arrayRemove(gameId))
+                .await()
+
+            Log.d("FavoriteRepository", "Jogo $gameId removido completamente.")
             true
         } catch (e: Exception) {
             Log.e("FavoriteRepository", "Erro ao remover favorito: ${e.message}")
@@ -52,18 +72,30 @@ class FavoriteRepository {
         }
     }
 
-    /**
-     * Busca a lista de IDs de jogos favoritos do usuário logado.
-     */
-    suspend fun getFavoriteIds(): List<String> {
-        val uid = auth.currentUser?.uid
-        if (uid == null) return emptyList()
+    private fun tryCreateUserDocAndAddFavorite(uid: String, gameId: String) {
+        val data = hashMapOf("favoriteGameIds" to listOf(gameId))
+        db.collection("users").document(uid).set(data, com.google.firebase.firestore.SetOptions.merge())
+    }
 
+    // ... getFavorites() continua igual ...
+    suspend fun getFavorites(): List<FavoriteItem> {
+        val uid = auth.currentUser?.uid ?: return emptyList()
         return try {
-            val document = usersCollection.document(uid).get().await()
-            (document.get("favoriteGameIds") as? List<String>) ?: emptyList()
+            val snapshot = db.collection("users").document(uid)
+                .collection("wishlist")
+                .get()
+                .await()
+
+            snapshot.documents.map { doc ->
+                FavoriteItem(
+                    gameId = doc.getString("gameId") ?: "",
+                    gameTitle = doc.getString("gameTitle") ?: "Sem Título",
+                    gameImageUrl = doc.getString("gameImageUrl"),
+                    gamePrice = "Ver Oferta",
+                    gameDiscount = null
+                )
+            }
         } catch (e: Exception) {
-            Log.e("FavoriteRepository", "Erro ao buscar lista de favoritos: ${e.message}")
             emptyList()
         }
     }

@@ -28,8 +28,19 @@ class GameDetailActivity : AppCompatActivity() {
         binding = ActivityGameDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Pega o GAME_ID que foi passado pelo Adapter
         gameID = intent.getStringExtra("GAME_ID")
+
+        val intentTitle = intent.getStringExtra("GAME_TITLE")
+        val intentImage = intent.getStringExtra("GAME_IMAGE")
+
+        if (intentTitle != null) binding.gameTitle.text = intentTitle
+
+        if (intentImage != null) {
+            Glide.with(this)
+                .load(intentImage)
+                .placeholder(R.drawable.ic_store_placeholder)
+                .into(binding.gameBanner)
+        }
 
         if (gameID == null) {
             Toast.makeText(this, "Erro: ID do jogo não encontrado", Toast.LENGTH_LONG).show()
@@ -37,18 +48,20 @@ class GameDetailActivity : AppCompatActivity() {
             return
         }
 
+        viewModel.setInitialData(gameID!!, intentTitle, intentImage)
+
         setupClickListeners()
         setupObservers()
 
-        viewModel.loadDetails(gameID!!)
+        if (gameID != null) viewModel.loadDetails(gameID!!)
     }
+
     private fun setupClickListeners() {
         binding.backButton.setOnClickListener {
-            finish() // Botão "Voltar"
+            finish()
         }
 
         binding.goToOfferButton.setOnClickListener {
-            // Pega a URL que guardamos nos dados da promoção
             val redirectUrl = promotionData?.deal?.url
 
             if (redirectUrl.isNullOrEmpty()) {
@@ -71,54 +84,55 @@ class GameDetailActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         viewModel.isLoading.observe(this) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
+                   }
 
         viewModel.dealDetails.observe(this) { promotion ->
             if (promotion == null) {
-                Toast.makeText(this, "Não foi possível carregar os detalhes.", Toast.LENGTH_SHORT).show()
-                return@observe
-            }
-
-            this.promotionData = promotion
-
-            // Popula a UI com os dados do Firestore
-            val gameInfo = promotion
-            val dealInfo = promotion.deal
-
-            binding.gameTitle.text = gameInfo.title
-
-            // Formata os preços para BRL
-            val brlFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
-
-            val newPriceAmount = dealInfo?.price?.amount ?: 0.0
-            val oldPriceAmount = dealInfo?.regular?.amount ?: 0.0
-
-// 1. Preço Novo (com "Grátis")
-            binding.discountedPrice.text = if (newPriceAmount == 0.0) {
-                "Grátis"
-            } else {
-                brlFormat.format(newPriceAmount)
-            }
-
-// 2. Preço Antigo (com strikethrough)
-            if (oldPriceAmount == 0.0 || oldPriceAmount == newPriceAmount) {
-                // Esconde se o preço antigo for 0 ou se não houver desconto
+                binding.tvNoOffers.visibility = View.VISIBLE
+                binding.discountedPrice.visibility = View.GONE
                 binding.originalPrice.visibility = View.GONE
-            } else {
-                binding.originalPrice.visibility = View.VISIBLE
-                binding.originalPrice.text = brlFormat.format(oldPriceAmount)
-                binding.originalPrice.paintFlags = binding.originalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-            }
-            // Carrega a imagem do header
-            Glide.with(this)
-                .load(gameInfo.assets?.boxart ?: gameInfo.assets?.banner600)
-                .placeholder(R.drawable.ic_store_placeholder)
-                .into(binding.gameBanner)
+                binding.goToOfferButton.visibility = View.GONE
+                binding.storeLogoContainer.visibility = View.GONE
 
-            // Define o logo da loja
-            binding.storeLogo.setImageResource(getStoreLogo(dealInfo?.shop?.name))
+            } else {
+                this.promotionData = promotion
+                binding.tvNoOffers.visibility = View.GONE
+                binding.discountedPrice.visibility = View.VISIBLE
+                binding.goToOfferButton.visibility = View.VISIBLE
+                binding.storeLogoContainer.visibility = View.VISIBLE
+
+                val gameInfo = promotion
+                val dealInfo = promotion.deal
+
+                binding.gameTitle.text = gameInfo.title
+
+                Glide.with(this)
+                    .load(gameInfo.assets?.boxart ?: gameInfo.assets?.banner600)
+                    .placeholder(R.drawable.ic_store_placeholder)
+                    .into(binding.gameBanner)
+
+                val brlFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
+                val newPriceAmount = dealInfo?.price?.amount ?: 0.0
+                val oldPriceAmount = dealInfo?.regular?.amount ?: 0.0
+
+                binding.discountedPrice.text = if (newPriceAmount == 0.0) {
+                    "Grátis"
+                } else {
+                    brlFormat.format(newPriceAmount)
+                }
+
+                if (oldPriceAmount == 0.0 || oldPriceAmount == newPriceAmount) {
+                    binding.originalPrice.visibility = View.GONE
+                } else {
+                    binding.originalPrice.visibility = View.VISIBLE
+                    binding.originalPrice.text = brlFormat.format(oldPriceAmount)
+                    binding.originalPrice.paintFlags = binding.originalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+
+                binding.storeLogo.setImageResource(getStoreLogo(dealInfo?.shop?.name))
+            }
         }
+
         viewModel.isFavorite.observe(this) { isFavorite ->
             updateFavoriteIcon(isFavorite)
         }

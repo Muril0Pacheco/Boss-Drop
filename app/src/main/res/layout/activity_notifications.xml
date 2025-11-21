@@ -58,25 +58,5 @@
         app:layout_constraintStart_toStartOf="@id/pushNotificationLabel"
         app:layout_constraintTop_toBottomOf="@id/pushNotificationLabel" />
 
-    <TextView
-        android:id="@+id/emailNotificationLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/ativar_desativar_email"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/emailNotificationSwitch"
-        app:layout_constraintStart_toStartOf="@id/pushNotificationLabel"
-        app:layout_constraintTop_toBottomOf="@id/divider1" />
-
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/emailNotificationSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@id/emailNotificationLabel"
-        app:layout_constraintEnd_toEndOf="@id/pushNotificationSwitch"
-        app:layout_constraintTop_toTopOf="@id/emailNotificationLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
