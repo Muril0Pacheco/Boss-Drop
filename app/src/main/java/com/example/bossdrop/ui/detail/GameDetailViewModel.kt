@@ -6,14 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bossdrop.data.model.ItadPromotion
-import com.example.bossdrop.data.repository.FavoriteRepository // Importar
+import com.example.bossdrop.data.repository.FavoriteRepository
 import com.example.bossdrop.data.repository.PromotionRepository
 import kotlinx.coroutines.launch
 
 class GameDetailViewModel : ViewModel() {
 
     private val promotionRepository = PromotionRepository()
-    private val favoriteRepository = FavoriteRepository() // Instanciar
+    private val favoriteRepository = FavoriteRepository()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -21,74 +21,87 @@ class GameDetailViewModel : ViewModel() {
     private val _dealDetails = MutableLiveData<ItadPromotion?>()
     val dealDetails: LiveData<ItadPromotion?> = _dealDetails
 
-    // Novo: LiveData para o estado do botão de favorito
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> = _isFavorite
 
     private var currentGamaId: String? = null
 
-    /**
-     * Busca os detalhes completos de um único jogo no Firestore.
-     */
+    private var fallbackTitle: String = ""
+    private var fallbackImage: String? = null
+
+    fun setInitialData(gameId: String, title: String?, image: String?) {
+        this.currentGamaId = gameId
+        if (title != null) this.fallbackTitle = title
+        this.fallbackImage = image
+    }
+
     fun loadDetails(gameId: String) {
-        currentGamaId = gameId // Salva o ID do jogo
+        currentGamaId = gameId
+
         viewModelScope.launch {
             try {
                 _isLoading.value = true
 
-                // 1. Carrega os detalhes da promoção
                 val promotion = promotionRepository.getPromotionById(gameId)
                 _dealDetails.value = promotion
 
-                // 2. Verifica se o jogo já é um favorito
                 checkFavoriteStatus(gameId)
 
             } catch (e: Exception) {
-                Log.e("GameDetailViewModel", "Erro ao carregar detalhes: ${e.message}")
+                Log.e("GameDetailViewModel", "Erro: ${e.message}")
                 _dealDetails.value = null
+                // Mesmo se der erro na API, verificamos se é favorito para o botão funcionar
+                checkFavoriteStatus(gameId)
             } finally {
                 _isLoading.value = false
             }
         }
     }
 
-    // Novo: Verifica o estado de favorito
     private fun checkFavoriteStatus(gameId: String) {
         viewModelScope.launch {
             try {
-                val favoriteIds = favoriteRepository.getFavoriteIds()
+                val favoriteItems = favoriteRepository.getFavorites()
+                val favoriteIds = favoriteItems.map { it.gameId }
                 _isFavorite.value = favoriteIds.contains(gameId)
             } catch (e: Exception) {
-                Log.e("GameDetailViewModel", "Erro ao checar favoritos: ${e.message}")
-                _isFavorite.value = false // Assume como não favorito em caso de erro
+                _isFavorite.value = false
             }
         }
     }
 
-    // Novo: Função para ser chamada pelo botão
     fun toggleFavorite() {
-        val gameId = currentGamaId ?: return // Pega o ID salvo
+        val gameId = currentGamaId ?: return
         val currentlyFavorite = _isFavorite.value ?: false
 
         viewModelScope.launch {
             val success: Boolean
+
             if (currentlyFavorite) {
-                // Remove dos favoritos
+
                 success = favoriteRepository.removeFromFavorites(gameId)
                 if (success) {
                     _isFavorite.value = false
                 }
             } else {
-                // Adiciona aos favoritos
-                success = favoriteRepository.addToFavorites(gameId)
-                if (success) {
-                    _isFavorite.value = true
-                }
-            }
 
-            if (!success) {
-                Log.w("GameDetailViewModel", "Falha ao atualizar favorito no Firestore.")
-                // (Opcional) Você pode postar um LiveData de erro para a Activity mostrar um Toast
+                val titleToAdd = _dealDetails.value?.title ?: fallbackTitle
+                val imageToAdd = _dealDetails.value?.assets?.boxart ?: fallbackImage
+
+                // Só adiciona se tivermos pelo menos um título
+                if (titleToAdd.isNotEmpty()) {
+                    success = favoriteRepository.addToFavorites(
+                        gameId = gameId,
+                        title = titleToAdd,
+                        imageUrl = imageToAdd
+                    )
+                    if (success) {
+                        _isFavorite.value = true
+                    }
+                } else {
+                    success = false
+                    Log.w("GameDetailViewModel", "Dados insuficientes para favoritar.")
+                }
             }
         }
     }
