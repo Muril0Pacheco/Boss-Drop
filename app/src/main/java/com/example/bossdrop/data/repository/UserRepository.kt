@@ -8,6 +8,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.firestore.SetOptions
 
 class EmailUpdateException(message: String) : Exception(message)
 class PasswordUpdateException(message: String) : Exception(message)
@@ -83,14 +85,10 @@ class UserRepository {
     suspend fun updateEmail(newEmail: String) {
         val user = auth.currentUser ?: throw EmailUpdateException("Usuário não encontrado")
         try {
-            // 1. Atualiza no Auth
             user.updateEmail(newEmail).await()
-            // 2. Atualiza no Firestore
             usersCollection.document(user.uid).update("email", newEmail).await()
         } catch (e: Exception) {
-            // Loga o erro real (ex: FirebaseAuthUserCollisionException)
             Log.e("UserRepository", "UpdateEmail failed: ${e.javaClass.simpleName}: ${e.message}")
-            // Lança nossa exceção personalizada
             throw EmailUpdateException(e.message ?: "Erro do Firebase ao atualizar email")
         }
     }
@@ -112,8 +110,8 @@ class UserRepository {
         } catch (e: Exception) { false }
     }
 
-    // ===========================================================================
-    // NOVAS FUNÇÕES DE NOTIFICAÇÃO (Adicionadas abaixo)
+ // ===========================================================================
+    // NOVAS FUNÇÕES DE NOTIFICAÇÃO
     // ===========================================================================
 
     /**
@@ -131,7 +129,7 @@ class UserRepository {
             val token = task.result
             val tokenData = hashMapOf("fcmToken" to token)
 
-            // Usa SetOptions.merge() para não apagar os outros campos (username, etc)
+            // Usa SetOptions.merge() para não apagar os outros campos
             usersCollection.document(uid)
                 .set(tokenData, SetOptions.merge())
                 .addOnSuccessListener {
@@ -139,7 +137,6 @@ class UserRepository {
                 }
         }
     }
-
     /**
      * Lê a preferência de notificação do usuário
      */

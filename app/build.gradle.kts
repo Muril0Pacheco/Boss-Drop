@@ -68,6 +68,9 @@ dependencies {
     implementation(libs.glide)
     ksp(libs.glide.compiler)
 
+    implementation(libs.firebase.functions.ktx)
+    implementation(libs.firebase.messaging.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
