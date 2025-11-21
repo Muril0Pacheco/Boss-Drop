@@ -1,22 +1,27 @@
 package com.example.bossdrop.ui.home
 
+import android.Manifest
 import android.content.Intent
-import com.example.bossdrop.R
-import com.example.bossdrop.ui.favorites.FavoritesActivity
-import com.example.bossdrop.ui.search.SearchActivity
-import com.example.bossdrop.ui.esconderTeclado
-import com.example.bossdrop.adapter.PromotionAdapter
-import com.example.bossdrop.databinding.ActivityHomeBinding
-import com.example.bossdrop.ui.settings.SettingsActivity
-import com.example.bossdrop.ui.home.HomeViewModel.FilterType
-import android.widget.Button
-
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
+import android.widget.Button
 import android.widget.RadioGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.bossdrop.R
+import com.example.bossdrop.adapter.PromotionAdapter
+import com.example.bossdrop.data.repository.UserRepository
+import com.example.bossdrop.databinding.ActivityHomeBinding
+import com.example.bossdrop.ui.detail.GameDetailActivity
+import com.example.bossdrop.ui.esconderTeclado
+import com.example.bossdrop.ui.favorites.FavoritesActivity
+import com.example.bossdrop.ui.search.SearchActivity
+import com.example.bossdrop.ui.settings.SettingsActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
@@ -26,11 +31,25 @@ class HomeActivity : AppCompatActivity() {
     private val viewModel: HomeViewModel by viewModels()
 
     private val adapter: PromotionAdapter = PromotionAdapter(emptyList())
+    private val userRepository = UserRepository()
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        userRepository.updateFcmToken()
+
+        askNotificationPermission()
+
+        checkIntentForNotificationClick()
 
         setupRecyclerView()
         setupObservers()
@@ -45,6 +64,25 @@ class HomeActivity : AppCompatActivity() {
 
         binding.homeRootLayout.setOnClickListener {
             esconderTeclado()
+        }
+    }
+
+    private fun checkIntentForNotificationClick() {
+        val gameId = intent.getStringExtra("gameId") // O campo 'data' do JSON vira extra aqui
+        if (gameId != null) {
+            val detailIntent = Intent(this, GameDetailActivity::class.java)
+            detailIntent.putExtra("GAME_ID", gameId)
+            startActivity(detailIntent)
+        }
+    }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
     }
 

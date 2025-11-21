@@ -5,6 +5,8 @@ import com.example.bossdrop.data.model.User
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.firestore.SetOptions
@@ -108,46 +110,65 @@ class UserRepository {
         } catch (e: Exception) { false }
     }
 
+ // ===========================================================================
+    // NOVAS FUNÇÕES DE NOTIFICAÇÃO
+    // ===========================================================================
+
+    /**
+     * Atualiza o Token FCM para notificações
+     */
     fun updateFcmToken() {
         val uid = auth.currentUser?.uid ?: return
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) return@addOnCompleteListener
+            if (!task.isSuccessful) {
+                Log.w("UserRepository", "Falha ao pegar token FCM", task.exception)
+                return@addOnCompleteListener
+            }
 
             val token = task.result
             val tokenData = hashMapOf("fcmToken" to token)
 
-            db.collection("users").document(uid)
+            // Usa SetOptions.merge() para não apagar os outros campos
+            usersCollection.document(uid)
                 .set(tokenData, SetOptions.merge())
+                .addOnSuccessListener {
+                    Log.d("UserRepository", "Token FCM atualizado.")
+                }
         }
     }
+    /**
+     * Lê a preferência de notificação do usuário
+     */
+    fun getNotificationPreference(onResult: (Boolean) -> Unit) {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            onResult(true) // Padrão é ligado se não tiver user
+            return
+        }
 
+        usersCollection.document(uid).get()
+            .addOnSuccessListener { document ->
+                // Se o campo não existir, assume TRUE (ativado por padrão)
+                val isEnabled = document.getBoolean("notificationsEnabled") ?: true
+                onResult(isEnabled)
+            }
+            .addOnFailureListener {
+                onResult(true) // Padrão em caso de erro
+            }
+    }
+
+    /**
+     * Salva a preferência de notificação
+     */
     fun updateNotificationPreference(isEnabled: Boolean, onResult: (Boolean) -> Unit) {
         val uid = auth.currentUser?.uid ?: return
 
         val data = hashMapOf("notificationsEnabled" to isEnabled)
 
-        db.collection("users").document(uid)
+        usersCollection.document(uid)
             .set(data, SetOptions.merge())
             .addOnSuccessListener { onResult(true) }
             .addOnFailureListener { onResult(false) }
     }
-
-    fun getNotificationPreference(onResult: (Boolean) -> Unit) {
-        val uid = auth.currentUser?.uid
-        if (uid == null) {
-            onResult(true)
-            return
-        }
-
-        db.collection("users").document(uid).get()
-            .addOnSuccessListener { document ->
-                val isEnabled = document.getBoolean("notificationsEnabled") ?: true
-                onResult(isEnabled)
-            }
-            .addOnFailureListener {
-                onResult(true)
-            }
-    }
-
 }
