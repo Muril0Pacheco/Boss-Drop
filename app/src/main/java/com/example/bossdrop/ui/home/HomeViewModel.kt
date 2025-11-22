@@ -28,15 +28,15 @@ class HomeViewModel : ViewModel() {
         MOST_POPULAR
     }
 
+    var currentFilter: FilterType = FilterType.MOST_POPULAR
+        private set
+
     init {
         loadPromotions(initialFilter = FilterType.MOST_POPULAR)
     }
 
-    /**
-     * Busca as promoções do Firestore e armazena na lista de cache (fullList).
 
-     */
-    fun loadPromotions(initialFilter: FilterType = FilterType.RECENT) { // <-- Parâmetro reintroduzido
+    fun loadPromotions(initialFilter: FilterType = FilterType.RECENT) {
         viewModelScope.launch {
             try {
                 _isLoading.value = true
@@ -45,8 +45,7 @@ class HomeViewModel : ViewModel() {
 
                 fullList = promotionList
 
-                applyFilter(initialFilter) // <-- Agora 'initialFilter' está resolvido
-
+                applyFilter(initialFilter)
 
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Erro ao carregar promoções: ${e.message}")
@@ -57,12 +56,11 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    /**
-     * Aplica os filtros na lista em memória (fullList)
-     */
-    fun applyFilter(type: FilterType) {
 
-        val currentList = fullList // Usa a lista cache para filtrar
+    fun applyFilter(type: FilterType) {
+        currentFilter = type
+
+        val currentList = fullList
 
         val filteredList = when (type) {
             FilterType.RECENT -> {
@@ -70,17 +68,14 @@ class HomeViewModel : ViewModel() {
             }
 
             FilterType.LOWEST_PRICE -> {
-                // Ordena por preço (menor para maior)
                 currentList.sortedBy { it.deal?.price?.amount ?: Double.MAX_VALUE }
             }
 
             FilterType.HIGHEST_DISCOUNT -> {
-                // Ordena por desconto (maior para menor)
                 currentList.sortedByDescending { it.deal?.cut ?: 0 }
             }
 
             FilterType.MOST_POPULAR -> {
-                // Filtra e ordena pela popularidade (campo 'popularityRank')
                 currentList
                     .filter { it.popularityRank != null }
                     .sortedBy { it.popularityRank }

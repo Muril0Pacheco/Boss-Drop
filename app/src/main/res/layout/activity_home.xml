@@ -31,8 +31,10 @@
                 android:background="@drawable/rounded_edittext_background"
                 android:drawableEnd="@drawable/ic_search"
                 android:hint="@string/search_hint"
+                android:textColorHint="@color/text_secondary"
                 android:paddingStart="16dp"
-                android:paddingEnd="12dp" />
+                android:paddingEnd="12dp"
+                />
 
             <ImageView
                 android:id="@+id/profileIcon"
@@ -111,6 +113,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/bottom_nav_tint_selector"
-        app:itemTextColor="@color/white"/>
+        app:itemTextColor="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

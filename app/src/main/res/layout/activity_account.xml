@@ -42,13 +42,19 @@
         android:hint="@string/alterar_nome_de_usuario"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/usernameTextView">
+        app:layout_constraintTop_toBottomOf="@id/usernameTextView"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/box_stroke_color">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/usernameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -60,13 +66,19 @@
         android:hint="@string/alterar_email"
         app:layout_constraintEnd_toEndOf="@id/usernameInputLayout"
         app:layout_constraintStart_toStartOf="@id/usernameInputLayout"
-        app:layout_constraintTop_toBottomOf="@id/usernameInputLayout">
+        app:layout_constraintTop_toBottomOf="@id/usernameInputLayout"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/box_stroke_color">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -79,13 +91,19 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="@id/emailInputLayout"
         app:layout_constraintStart_toStartOf="@id/emailInputLayout"
-        app:layout_constraintTop_toBottomOf="@id/emailInputLayout">
+        app:layout_constraintTop_toBottomOf="@id/emailInputLayout"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/box_stroke_color">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/newPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -98,13 +116,19 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="@id/newPasswordInputLayout"
         app:layout_constraintStart_toStartOf="@id/newPasswordInputLayout"
-        app:layout_constraintTop_toBottomOf="@id/newPasswordInputLayout">
+        app:layout_constraintTop_toBottomOf="@id/newPasswordInputLayout"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/box_stroke_color">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/currentPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -127,6 +151,7 @@
         android:text="@string/salvar"
         android:textAllCaps="false"
         app:backgroundTint="@color/purple_primary"
+        android:textColor="@color/white"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="@id/usernameInputLayout"
         app:layout_constraintStart_toStartOf="@id/usernameInputLayout"

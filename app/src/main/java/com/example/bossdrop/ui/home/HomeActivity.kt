@@ -92,7 +92,6 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // NOVO: Listener do ícone de filtro
         binding.filterIcon.setOnClickListener {
             showFilterDialog()
         }
@@ -103,26 +102,30 @@ class HomeActivity : AppCompatActivity() {
         val view = layoutInflater.inflate(R.layout.bottom_sheet_filter, null)
         dialog.setContentView(view)
 
-        // Encontra as views no layout do BottomSheet
         val radioGroup = view.findViewById<RadioGroup>(R.id.filterRadioGroup)
         val btnApply = view.findViewById<Button>(R.id.applyButton)
+
+        val idToCheck = when (viewModel.currentFilter) {
+            HomeViewModel.FilterType.RECENT -> R.id.rbDefault
+            HomeViewModel.FilterType.LOWEST_PRICE -> R.id.rbLowestPrice
+            HomeViewModel.FilterType.HIGHEST_DISCOUNT -> R.id.rbHighestDiscount
+            HomeViewModel.FilterType.MOST_POPULAR -> R.id.rbMostPopular
+        }
+        radioGroup.check(idToCheck)
 
         btnApply.setOnClickListener {
             val selectedId = radioGroup.checkedRadioButtonId
 
-            // Mapeia o ID do RadioButton selecionado para o Enum FilterType
             val filterType = when (selectedId) {
-                R.id.rbDefault -> HomeViewModel.FilterType.RECENT // MUDOU DE DEFAULT PARA RECENT
+                R.id.rbDefault -> HomeViewModel.FilterType.RECENT
                 R.id.rbLowestPrice -> HomeViewModel.FilterType.LOWEST_PRICE
                 R.id.rbHighestDiscount -> HomeViewModel.FilterType.HIGHEST_DISCOUNT
                 R.id.rbMostPopular -> HomeViewModel.FilterType.MOST_POPULAR
-                else -> HomeViewModel.FilterType.RECENT // MUDOU DE DEFAULT PARA RECENT
+                else -> HomeViewModel.FilterType.RECENT
             }
 
-            // Chama a lógica de filtro no ViewModel
             viewModel.applyFilter(filterType)
-
-            dialog.dismiss() // Fecha o menu
+            dialog.dismiss()
         }
 
         dialog.show()
@@ -134,20 +137,15 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        // Observador de promoções (agora usa ItadPromotion)
         viewModel.promotions.observe(this) { promotions ->
-            // Atualiza a lista no adapter existente
             adapter.updateList(promotions)
         }
 
-        // Observador do Loading (agora usa o ID 'progressBar')
         viewModel.isLoading.observe(this) { isLoading ->
             if (isLoading) {
-                // Se estiver carregando, mostra o ProgressBar e esconde a lista
                 binding.promotionsRecyclerView.visibility = View.GONE
                 binding.progressBar.visibility = View.VISIBLE
             } else {
-                // Se terminou, esconde o ProgressBar e mostra a lista
                 binding.promotionsRecyclerView.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.GONE
             }
@@ -155,7 +153,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        // O clique no EditText vai direto para a SearchActivity
         binding.searchEditText.isFocusable = false
         binding.searchEditText.isClickable = true
         binding.searchEditText.setOnClickListener {
@@ -165,17 +162,14 @@ class HomeActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    // Já estamos aqui
                     true
                 }
                 R.id.navigation_search -> {
                     startActivity(Intent(this, SearchActivity::class.java))
-                    // finish() // Não finalize a Home, deixe o usuário voltar
                     true
                 }
                 R.id.navigation_favorites -> {
                     startActivity(Intent(this, FavoritesActivity::class.java))
-                    // finish() // Não finalize a Home, deixe o usuário voltar
                     true
                 }
                 else -> false

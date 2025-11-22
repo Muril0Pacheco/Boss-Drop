@@ -8,8 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.firestore.SetOptions
+
 
 class EmailUpdateException(message: String) : Exception(message)
 class PasswordUpdateException(message: String) : Exception(message)
@@ -37,14 +36,12 @@ class UserRepository {
             val user = document.toObject(User::class.java)
 
             if (user != null) {
-                // Anexa os dados do Auth que não estão no Firestore
                 user.email = firebaseUser.email ?: user.email
 
-                // Verifica se o provedor é "google.com"
                 val provider = firebaseUser.providerData.find {
                     it.providerId == "google.com"
                 }
-                user.providerId = provider?.providerId ?: "password" // Salva "google.com" or "password"
+                user.providerId = provider?.providerId ?: "password"
             }
             user
         } catch (e: Exception) {
@@ -110,13 +107,7 @@ class UserRepository {
         } catch (e: Exception) { false }
     }
 
- // ===========================================================================
-    // NOVAS FUNÇÕES DE NOTIFICAÇÃO
-    // ===========================================================================
 
-    /**
-     * Atualiza o Token FCM para notificações
-     */
     fun updateFcmToken() {
         val uid = auth.currentUser?.uid ?: return
 
@@ -129,7 +120,6 @@ class UserRepository {
             val token = task.result
             val tokenData = hashMapOf("fcmToken" to token)
 
-            // Usa SetOptions.merge() para não apagar os outros campos
             usersCollection.document(uid)
                 .set(tokenData, SetOptions.merge())
                 .addOnSuccessListener {
@@ -143,18 +133,17 @@ class UserRepository {
     fun getNotificationPreference(onResult: (Boolean) -> Unit) {
         val uid = auth.currentUser?.uid
         if (uid == null) {
-            onResult(true) // Padrão é ligado se não tiver user
+            onResult(true)
             return
         }
 
         usersCollection.document(uid).get()
             .addOnSuccessListener { document ->
-                // Se o campo não existir, assume TRUE (ativado por padrão)
                 val isEnabled = document.getBoolean("notificationsEnabled") ?: true
                 onResult(isEnabled)
             }
             .addOnFailureListener {
-                onResult(true) // Padrão em caso de erro
+                onResult(true)
             }
     }
 
