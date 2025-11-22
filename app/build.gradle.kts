@@ -44,8 +44,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.analytics)
-    implementation(libs.firebase.firestore.ktx) 
-
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.messaging.ktx)
     implementation(libs.google.playservices.auth)
 
     implementation(libs.androidx.core.ktx)
@@ -67,6 +67,9 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.glide)
     ksp(libs.glide.compiler)
+
+    implementation(libs.firebase.functions.ktx)
+    implementation(libs.firebase.messaging.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

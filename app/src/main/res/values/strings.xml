@@ -17,7 +17,6 @@
     <string name="hint_repeat_password">Repita sua senha</string>
     <string name="cadastrar">Cadastrar</string>
     <string name="already_have_account">Já possuo cadastro, Login</string>
-    <string name="profile_image_description">Imagem de perfil do usuário</string>
 
     <!-- Enviar email para redefinir senha -->
     <string name="redefinir_senha">Redefinir Senha</string>
@@ -38,8 +37,6 @@
     <string name="menu_favorites">Favoritos</string>
     <string name="profile_icon">Perfil</string>
 
-    <!-- Favoritos -->
-
     <!-- Pesquisa -->
     <string name="mais_buscados">Mais Buscados</string>
     <string name="recomendados">Recomendados:</string>
@@ -47,7 +44,7 @@
 
     <!-- Conta -->
     <string name="conta">Conta</string>
-    <string name="username_placeholder">\@username</string>
+    <string name="username_placeholder">username</string>
     <string name="alterar_nome_de_usuario">Alterar nome de usuário</string>
     <string name="alterar_email">Alterar Email</string>
     <string name="alterar_senha_action">Alterar Senha</string>
@@ -71,4 +68,6 @@
     <string name="ir_para_promocao">IR PARA PROMOÇÃO</string>
 
 
+    <!-- Filtro -->
+    <string name="filter_icon">Filtros</string>
 </resources>

@@ -3,6 +3,9 @@ package com.example.bossdrop.ui.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.bossdrop.data.repository.UserRepository
+import kotlinx.coroutines.launch
 
 // Enum para comunicar eventos de navegação para a Activity
 enum class SettingsNavigation {
@@ -14,35 +17,33 @@ enum class SettingsNavigation {
 
 class SettingsViewModel : ViewModel() {
 
+    private val userRepository = UserRepository() // Instância do repositório de usuário
+
     // 1. Estado (Dados)
-    // O username seria buscado de um repositório (ex: UserRepository)
     private val _username = MutableLiveData<String>()
     val username: LiveData<String> = _username
 
     // 2. Eventos (Ações e Navegação)
-    // Usamos MutableLiveData para eventos que só devem ser consumidos uma vez (como navegação)
     private val _navigationEvent = MutableLiveData<SettingsNavigation>()
     val navigationEvent: LiveData<SettingsNavigation> = _navigationEvent
 
-    // Evento para o fluxo de "Sair da conta"
     private val _signOutEvent = MutableLiveData<Boolean>()
     val signOutEvent: LiveData<Boolean> = _signOutEvent
 
     init {
-        // Simula o carregamento dos dados do usuário
+        // Carrega os dados reais do usuário
         loadUserData()
     }
 
     private fun loadUserData() {
-        // Na vida real, você chamaria:
-        // viewModelScope.launch {
-        //    val user = userRepository.getCurrentUser()
-        //    _username.value = user.username
-        // }
-        _username.value = "@murilo_bossdrop" // Placeholder
+        viewModelScope.launch {
+            val user = userRepository.getCurrentUser()
+            // Se o usuário existir, use o username real.
+            _username.value = user?.username ?: "@usuario_nao_encontrado"
+        }
     }
 
-    // 3. Funções chamadas pela View (Cliques)
+    // 3. Funções chamadas pela View (Cliques) - Permanecem as mesmas
     fun onAccountClicked() {
         _navigationEvent.value = SettingsNavigation.TO_ACCOUNT
     }
@@ -60,8 +61,6 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun onSignOutClicked() {
-        // Inicia o fluxo de "Sair da conta"
-        // A Activity vai observar isso e mostrar um diálogo de confirmação
         _signOutEvent.value = true
     }
 }

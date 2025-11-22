@@ -2,6 +2,7 @@ package com.example.bossdrop.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.graphics.Typeface
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bossdrop.databinding.ActivitySettingsBinding
@@ -54,6 +55,7 @@ class SettingsActivity : AppCompatActivity() {
         // Observa o username
         viewModel.username.observe(this) { username ->
             binding.tvUsername.text = username
+            binding.tvUsername.setTypeface(null, Typeface.BOLD)
         }
 
         // Observa eventos de navegação

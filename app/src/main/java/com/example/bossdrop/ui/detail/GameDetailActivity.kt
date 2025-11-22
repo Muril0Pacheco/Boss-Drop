@@ -28,8 +28,19 @@ class GameDetailActivity : AppCompatActivity() {
         binding = ActivityGameDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Pega o GAME_ID que foi passado pelo Adapter
         gameID = intent.getStringExtra("GAME_ID")
+
+        val intentTitle = intent.getStringExtra("GAME_TITLE")
+        val intentImage = intent.getStringExtra("GAME_IMAGE")
+
+        if (intentTitle != null) binding.gameTitle.text = intentTitle
+
+        if (intentImage != null) {
+            Glide.with(this)
+                .load(intentImage)
+                .placeholder(R.drawable.ic_store_placeholder)
+                .into(binding.gameBanner)
+        }
 
         if (gameID == null) {
             Toast.makeText(this, "Erro: ID do jogo não encontrado", Toast.LENGTH_LONG).show()
@@ -37,28 +48,20 @@ class GameDetailActivity : AppCompatActivity() {
             return
         }
 
-        // setupToolbar() // Removido pois não temos mais um 'toolbar'
+        viewModel.setInitialData(gameID!!, intentTitle, intentImage)
+
         setupClickListeners()
         setupObservers()
 
-        // Manda o ViewModel carregar os dados do Firestore
-        viewModel.loadDetailsFromFirestore(gameID!!)
+        if (gameID != null) viewModel.loadDetails(gameID!!)
     }
 
-    // A função 'setupToolbar' foi removida
-    // O clique de voltar agora está em 'setupClickListeners'
-
     private fun setupClickListeners() {
-        // ◀️ --- MUDANÇA AQUI ---
-        // Alterado de 'toolbar.setNavigation...' para 'backButton'
         binding.backButton.setOnClickListener {
-            finish() // Botão "Voltar"
+            finish()
         }
 
-        // ◀️ --- MUDANÇA AQUI ---
-        // Alterado de 'buyButton' para 'goToOfferButton'
         binding.goToOfferButton.setOnClickListener {
-            // Pega a URL que guardamos nos dados da promoção
             val redirectUrl = promotionData?.deal?.url
 
             if (redirectUrl.isNullOrEmpty()) {
@@ -74,61 +77,64 @@ class GameDetailActivity : AppCompatActivity() {
             }
         }
 
-        // ◀️ --- MUDANÇA AQUI ---
-        // Alterado de 'favoriteIcon' para 'favoriteButton'
         binding.favoriteButton.setOnClickListener {
-            // TODO: Adicionar lógica do Firestore aqui
-            Toast.makeText(this, "Lógica de Favorito (Firestore) ainda não implementada.", Toast.LENGTH_SHORT).show()
+            viewModel.toggleFavorite()
         }
     }
 
     private fun setupObservers() {
         viewModel.isLoading.observe(this) { isLoading ->
-            // ◀️ --- NOME CORRETO ---
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
+                   }
 
         viewModel.dealDetails.observe(this) { promotion ->
             if (promotion == null) {
-                Toast.makeText(this, "Não foi possível carregar os detalhes.", Toast.LENGTH_SHORT).show()
-                return@observe
+                binding.tvNoOffers.visibility = View.VISIBLE
+                binding.discountedPrice.visibility = View.GONE
+                binding.originalPrice.visibility = View.GONE
+                binding.goToOfferButton.visibility = View.GONE
+                binding.storeLogoContainer.visibility = View.GONE
+
+            } else {
+                this.promotionData = promotion
+                binding.tvNoOffers.visibility = View.GONE
+                binding.discountedPrice.visibility = View.VISIBLE
+                binding.goToOfferButton.visibility = View.VISIBLE
+                binding.storeLogoContainer.visibility = View.VISIBLE
+
+                val gameInfo = promotion
+                val dealInfo = promotion.deal
+
+                binding.gameTitle.text = gameInfo.title
+
+                Glide.with(this)
+                    .load(gameInfo.assets?.boxart ?: gameInfo.assets?.banner600)
+                    .placeholder(R.drawable.ic_store_placeholder)
+                    .into(binding.gameBanner)
+
+                val brlFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
+                val newPriceAmount = dealInfo?.price?.amount ?: 0.0
+                val oldPriceAmount = dealInfo?.regular?.amount ?: 0.0
+
+                binding.discountedPrice.text = if (newPriceAmount == 0.0) {
+                    "Grátis"
+                } else {
+                    brlFormat.format(newPriceAmount)
+                }
+
+                if (oldPriceAmount == 0.0 || oldPriceAmount == newPriceAmount) {
+                    binding.originalPrice.visibility = View.GONE
+                } else {
+                    binding.originalPrice.visibility = View.VISIBLE
+                    binding.originalPrice.text = brlFormat.format(oldPriceAmount)
+                    binding.originalPrice.paintFlags = binding.originalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+
+                binding.storeLogo.setImageResource(getStoreLogo(dealInfo?.shop?.name))
             }
+        }
 
-            // Guarda os dados da promoção para usar no botão de "Comprar"
-            this.promotionData = promotion
-
-            // Popula a UI com os dados do Firestore
-            val gameInfo = promotion
-            val dealInfo = promotion.deal
-
-            // ◀️ --- MUDANÇA AQUI ---
-            // Alterado de 'gameTitleTextView' para 'gameTitle'
-            binding.gameTitle.text = gameInfo.title
-
-            // Formata os preços para BRL
-            val brlFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
-
-            // ◀️ --- MUDANÇA AQUI ---
-            // Alterado de 'salePriceTextView' para 'discountedPrice'
-            binding.discountedPrice.text = brlFormat.format(dealInfo?.price?.amount ?: 0.0)
-
-            // ◀️ --- MUDANÇA AQUI ---
-            // Alterado de 'retailPriceTextView' para 'originalPrice'
-            binding.originalPrice.text = brlFormat.format(dealInfo?.regular?.amount ?: 0.0)
-            binding.originalPrice.paintFlags = binding.originalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-
-            // Carrega a imagem do header
-            // ◀️ --- MUDANÇA AQUI ---
-            // Alterado de 'gameHeaderImageView' para 'gameBanner'
-            Glide.with(this)
-                .load(gameInfo.assets?.boxart ?: gameInfo.assets?.banner600)
-                .placeholder(R.drawable.ic_store_placeholder)
-                .into(binding.gameBanner)
-
-            // Define o logo da loja
-            // ◀️ --- MUDANÇA AQUI ---
-            // Alterado de 'storeLogoImageView' para 'storeLogo'
-            binding.storeLogo.setImageResource(getStoreLogo(dealInfo?.shop?.name))
+        viewModel.isFavorite.observe(this) { isFavorite ->
+            updateFavoriteIcon(isFavorite)
         }
     }
 
@@ -142,7 +148,16 @@ class GameDetailActivity : AppCompatActivity() {
             "EA App" -> R.drawable.ea_app_logo
             "Green Man Gaming" -> R.drawable.gmg_logo
             "Nuuvem" -> R.drawable.nuuvem_logo
+            "Microsoft Store" -> R.drawable.microsoft_logo
             else -> R.drawable.ic_store_placeholder
+        }
+    }
+
+    private fun updateFavoriteIcon(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.favoriteButton.setImageResource(R.drawable.ic_favorite_filled)
+        } else {
+            binding.favoriteButton.setImageResource(R.drawable.ic_favorite_border)
         }
     }
 }

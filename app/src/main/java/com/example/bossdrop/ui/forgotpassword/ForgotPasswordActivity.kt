@@ -2,6 +2,7 @@ package com.example.bossdrop.ui.forgotpassword
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +21,8 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        supportActionBar?.setDisplayShowTitleEnabled(true)
 
         setupObservers()
         setupClickListeners()
@@ -32,17 +34,29 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         viewModel.statusMessage.observe(this) { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show() // Mudei para LONG
 
             if (message.startsWith("Link enviado")) {
                 finish() // Fecha a tela após sucesso
+            }
+        }
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.sendLinkButton.isEnabled = false
+                binding.emailEditText.isEnabled = false
+            } else {
+                binding.progressBar.visibility = View.GONE
+                binding.sendLinkButton.isEnabled = true
+                binding.emailEditText.isEnabled = true
             }
         }
     }
 
     private fun setupClickListeners() {
         binding.sendLinkButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
+            val email = binding.emailEditText.text.toString().trim() // Adiciona trim()
             viewModel.sendResetLink(email)
         }
     }

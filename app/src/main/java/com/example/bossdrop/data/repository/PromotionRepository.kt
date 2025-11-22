@@ -4,23 +4,11 @@ import android.util.Log
 import com.example.bossdrop.data.model.ItadPromotion
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
-import kotlin.text.get
 
-/**
- * Repositório responsável por buscar os dados das promoções.
- * Agora ele lê do Firestore, não mais do Retrofit/CheapShark.
- */
 class PromotionRepository {
 
-    // Pega a instância do Firestore
     private val db = FirebaseFirestore.getInstance()
 
-    /**
-     * Busca a lista de promoções da coleção 'promocoes_br_v3' no Firestore.
-     * Esta é uma função de suspensão e deve ser chamada de uma Coroutine (ex: no ViewModel).
-     *
-     * @return Uma lista de [ItadPromotion] ou uma lista vazia se um erro ocorrer.
-     */
     suspend fun getPromotionsFromFirestore(): List<ItadPromotion> {
         return try {
             // Chama o Firestore, busca a coleção e espera o resultado
@@ -39,9 +27,7 @@ class PromotionRepository {
             emptyList() // Retorna uma lista vazia para o app não quebrar
         }
     }
-    /**
-     * Busca os detalhes de UMA promoção específica pelo seu ID.
-     */
+
     suspend fun getPromotionById(gameId: String): ItadPromotion? {
         return try {
             val document = db.collection("promocoes_br_v3").document(gameId).get().await()

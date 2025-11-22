@@ -4,56 +4,56 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.bossdrop.data.repository.UserRepository
 import com.example.bossdrop.databinding.ActivityNotificationsBinding
 
 class NotificationsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNotificationsBinding
+    private val userRepository = UserRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNotificationsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configura a Toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        setupListeners()
-        setupBottomNavigation()
+        loadCurrentState()
     }
 
-    // Gerencia o clique no botão de voltar da toolbar
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish() // Fecha a activity e volta para a anterior
-            return true
+    private fun loadCurrentState() {
+        binding.pushNotificationSwitch.setOnCheckedChangeListener(null)
+
+        userRepository.getNotificationPreference { isEnabled ->
+            binding.pushNotificationSwitch.isChecked = isEnabled
+
+            setupListeners()
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setupListeners() {
-        // Listener para o switch de notificação push
         binding.pushNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
-            val status = if (isChecked) "ativadas" else "desativadas"
-            Toast.makeText(this, "Notificações push $status", Toast.LENGTH_SHORT).show()
-            // TODO: Salvar esta preferência do usuário (ex: em SharedPreferences)
-        }
 
-        // Listener para o switch de notificação por email
-        binding.emailNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
-            val status = if (isChecked) "ativadas" else "desativadas"
-            Toast.makeText(this, "Notificações por email $status", Toast.LENGTH_SHORT).show()
-            // TODO: Salvar esta preferência do usuário
+            userRepository.updateNotificationPreference(isChecked) { success ->
+                if (success) {
+                    val status = if (isChecked) "ativadas" else "desativadas"
+                    Toast.makeText(this, "Notificações $status", Toast.LENGTH_SHORT).show()
+                } else {
+                    binding.pushNotificationSwitch.isChecked = !isChecked
+                    Toast.makeText(this, "Erro ao salvar preferência.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
-    private fun setupBottomNavigation() {
-        // Configure a navegação inferior como nas outras telas, se necessário
-        binding.bottomNavigation.setOnItemSelectedListener {
-            // ... lógica de navegação
-            true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
         }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -1,25 +1,35 @@
 package com.example.bossdrop.ui.favorites
 
-import com.example.bossdrop.R
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.bossdrop.data.model.FavoriteItem
+import com.example.bossdrop.data.repository.FavoriteRepository
+import kotlinx.coroutines.launch
 
 class FavoritesViewModel : ViewModel() {
 
+    private val favoriteRepository = FavoriteRepository()
+
     private val _favorites = MutableLiveData<List<FavoriteItem>>()
     val favorites: LiveData<List<FavoriteItem>> = _favorites
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
     init {
         loadFavorites()
     }
 
-    private fun loadFavorites() {
-        // Aqui você pode futuramente buscar da API ou banco de dados
-        _favorites.value = listOf(
+    fun loadFavorites() {
+        viewModelScope.launch {
+            _isLoading.value = true
 
-            FavoriteItem("GTA V", R.drawable.gta_cover, "R$ 99,90")
-        )
+            val items = favoriteRepository.getFavorites()
+
+            _favorites.value = items
+            _isLoading.value = false
+        }
     }
 }

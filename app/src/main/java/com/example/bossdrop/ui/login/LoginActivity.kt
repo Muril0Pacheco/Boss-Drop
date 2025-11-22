@@ -3,12 +3,14 @@ package com.example.bossdrop.ui.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
-
 import com.example.bossdrop.ui.register.RegisterActivity
 import com.example.bossdrop.ui.forgotpassword.ForgotPasswordActivity
 import com.example.bossdrop.R
@@ -33,12 +35,28 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configura o Google Sign-In com a nova API
         oneTapClient = Identity.getSignInClient(this)
 
         setupObservers()
         setupClickListeners()
+        setupTextWatchers()
     }
+
+    private fun setupTextWatchers() {
+        val errorCleaner = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Limpa o erro de ambos os campos
+                binding.emailInputLayout.error = null
+                binding.passwordInputLayout.error = null
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        binding.emailEditText.addTextChangedListener(errorCleaner)
+        binding.passwordEditText.addTextChangedListener(errorCleaner)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
@@ -68,23 +86,23 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         viewModel.statusMessage.observe(this) { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            if (message.startsWith("Falha no login")) {
+                binding.passwordInputLayout.error = "E-mail ou senha incorretos."
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
         }
 
         viewModel.isLoading.observe(this) { loading ->
-            // Implemente a lógica de loading aqui
+            binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+
+            binding.loginButton.isEnabled = !loading
+            binding.googleSignInButton.isEnabled = !loading
+            binding.registerButton.isEnabled = !loading
+            binding.forgotPasswordTextView.isEnabled = !loading
+
             if (loading) {
-                // Mostrar loading
-                binding.loginButton.isEnabled = false
-                binding.googleSignInButton.isEnabled = false
-                binding.registerButton.isEnabled = false
-                binding.forgotPasswordTextView.isEnabled = false
-            } else {
-                // Esconder loading
-                binding.loginButton.isEnabled = true
-                binding.googleSignInButton.isEnabled = true
-                binding.registerButton.isEnabled = true
-                binding.forgotPasswordTextView.isEnabled = true
+                esconderTeclado()
             }
         }
 
@@ -102,10 +120,15 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.loginButton.setOnClickListener {
+            // Limpa erros antigos antes de validar
+            binding.emailInputLayout.error = null
+            binding.passwordInputLayout.error = null
+
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
             if (validateInputs(email, password)) {
+                esconderTeclado()
                 viewModel.login(email, password)
             }
         }
@@ -128,13 +151,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateInputs(email: String, password: String): Boolean {
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show()
+        if (email.isEmpty()) {
+            binding.emailInputLayout.error = "Por favor, preencha o e-mail"
             return false
         }
-
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Por favor, insira um email válido", Toast.LENGTH_SHORT).show()
+            binding.emailInputLayout.error = "Por favor, insira um email válido"
+            return false
+        }
+        if (password.isEmpty()) {
+            binding.passwordInputLayout.error = "Por favor, preencha a senha"
             return false
         }
 
@@ -172,6 +198,6 @@ class LoginActivity : AppCompatActivity() {
     private fun navigateToHome() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
-        finish() // Fecha a LoginActivity para não voltar para ela ao pressionar back
+        finish()
     }
 }

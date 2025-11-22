@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/accountRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -12,101 +13,134 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_back" />
-
-    <TextView
-        android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/conta"
-        android:textColor="@color/black"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profileImageCard"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="24dp"
-        app:cardCornerRadius="60dp"
-        app:cardElevation="0dp"
-        app:strokeColor="#E0E0E0"
-        app:strokeWidth="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView">
-
-        <ImageView
-            android:id="@+id/profileImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_person"
-            app:tint="@android:color/darker_gray" />
-    </com.google.android.material.card.MaterialCardView>
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/conta"
+        app:titleTextColor="@color/black"
+        app:navigationIconTint="@color/black"
+        />
 
     <TextView
         android:id="@+id/usernameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/username_placeholder"
+        android:layout_marginTop="32dp"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileImageCard" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:text="username" />
 
-    <TextView
-        android:id="@+id/changeUsername"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/usernameInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:background="@drawable/bordered_field_background"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/alterar_nome_de_usuario"
-        android:textColor="@color/text_secondary"
+        android:hint="@string/alterar_nome_de_usuario"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/usernameTextView" />
+        app:layout_constraintTop_toBottomOf="@id/usernameTextView"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/box_stroke_color">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/usernameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/alterar_email"
+        app:layout_constraintEnd_toEndOf="@id/usernameInputLayout"
+        app:layout_constraintStart_toStartOf="@id/usernameInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/usernameInputLayout"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/box_stroke_color">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newPasswordInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Nova Senha (Opcional)"
+        app:endIconMode="password_toggle"
+        app:layout_constraintEnd_toEndOf="@id/emailInputLayout"
+        app:layout_constraintStart_toStartOf="@id/emailInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/emailInputLayout"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/box_stroke_color">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/currentPasswordInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Senha Atual (Necessária para salvar)"
+        app:endIconMode="password_toggle"
+        app:layout_constraintEnd_toEndOf="@id/newPasswordInputLayout"
+        app:layout_constraintStart_toStartOf="@id/newPasswordInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/newPasswordInputLayout"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/box_stroke_color">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/currentPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/changeEmail"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bordered_field_background"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/alterar_email"
-        android:textColor="@color/text_secondary"
-        app:layout_constraintEnd_toEndOf="@id/changeUsername"
-        app:layout_constraintStart_toStartOf="@id/changeUsername"
-        app:layout_constraintTop_toBottomOf="@id/changeUsername" />
-
-    <TextView
-        android:id="@+id/changePassword"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bordered_field_background"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/alterar_senha_action"
-        android:textColor="@color/text_secondary"
-        app:layout_constraintEnd_toEndOf="@id/changeEmail"
-        app:layout_constraintStart_toStartOf="@id/changeEmail"
-        app:layout_constraintTop_toBottomOf="@id/changeEmail" />
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Esqueceu sua senha?"
+        android:textColor="@color/purple_primary"
+        android:padding="4dp"
+        app:layout_constraintEnd_toEndOf="@id/currentPasswordInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/currentPasswordInputLayout" />
 
 
     <com.google.android.material.button.MaterialButton
@@ -117,19 +151,10 @@
         android:text="@string/salvar"
         android:textAllCaps="false"
         app:backgroundTint="@color/purple_primary"
+        android:textColor="@color/white"
         app:cornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="@id/changePassword"
-        app:layout_constraintStart_toStartOf="@id/changePassword"
-        app:layout_constraintTop_toBottomOf="@id/changePassword" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/purple_secondary"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:layout_constraintEnd_toEndOf="@id/usernameInputLayout"
+        app:layout_constraintStart_toStartOf="@id/usernameInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/tvForgotPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

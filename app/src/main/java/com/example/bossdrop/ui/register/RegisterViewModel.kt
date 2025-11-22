@@ -4,49 +4,61 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bossdrop.data.repository.RegisterEmailInUseException
+import com.example.bossdrop.data.repository.RegisterGenericException
 import com.example.bossdrop.data.repository.RegisterRepository
+import com.example.bossdrop.data.repository.RegisterWeakPasswordException
 import kotlinx.coroutines.launch
+
+enum class RegisterResultType {
+    SUCCESS,
+    ERROR_WEAK_PASSWORD,
+    ERROR_EMAIL_IN_USE,
+    ERROR_GENERIC
+}
 
 class RegisterViewModel : ViewModel() {
 
     private val repository = RegisterRepository()
 
-    private val _statusMessage = MutableLiveData<String>()
-    val statusMessage: LiveData<String> = _statusMessage
-
-    private val _isLoading = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun register(username: String, email: String, password: String, repeatPassword: String) {
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || repeatPassword.isEmpty()) {
-            _statusMessage.value = "Preencha todos os campos."
+    private val _registrationResult = MutableLiveData<Pair<RegisterResultType, String?>>()
+    val registrationResult: LiveData<Pair<RegisterResultType, String?>> = _registrationResult
+
+    fun register(username: String, email: String, password: String, confirmPassword: String) {
+
+        if (password != confirmPassword) {
+            // Erro de UI: Senhas não coincidem
+            _registrationResult.value = Pair(RegisterResultType.ERROR_WEAK_PASSWORD, "As senhas não coincidem")
+            return
+        }
+        if (password.length < 6) {
+            // Erro de UI: Validação local (nem tenta ir ao Firebase)
+            _registrationResult.value = Pair(RegisterResultType.ERROR_WEAK_PASSWORD, "A senha deve ter pelo menos 6 caracteres")
             return
         }
 
-        if (password != repeatPassword) {
-            _statusMessage.value = "As senhas não coincidem."
-            return
-        }
+        _isLoading.value = true
 
         viewModelScope.launch {
             try {
-                _isLoading.value = true
-                val success = repository.registerUser(username, email, password)
+                repository.registerUser(username, email, password)
+                _registrationResult.value = Pair(RegisterResultType.SUCCESS, null)
 
-                if (success) {
-                    _statusMessage.value = "Usuário cadastrado com sucesso!"
-                } else {
-                    _statusMessage.value = "Email já cadastrado."
-                }
-            } catch (e: Exception) {
-                _statusMessage.value = "Erro ao cadastrar: ${e.message}"
+            } catch (e: RegisterWeakPasswordException) {
+                _registrationResult.value = Pair(RegisterResultType.ERROR_WEAK_PASSWORD, e.message)
+
+            } catch (e: RegisterEmailInUseException) {
+                _registrationResult.value = Pair(RegisterResultType.ERROR_EMAIL_IN_USE, null)
+
+            } catch (e: RegisterGenericException) {
+                _registrationResult.value = Pair(RegisterResultType.ERROR_GENERIC, e.message)
+
             } finally {
                 _isLoading.value = false
             }
         }
-    }
-
-    fun chooseProfilePhoto() {
-        _statusMessage.value = "Escolher foto de perfil"
     }
 }

@@ -30,13 +30,19 @@
         android:hint="@string/email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoImageView">
+        app:layout_constraintTop_toBottomOf="@id/logoImageView"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/text_secondary"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,13 +57,20 @@
         android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/emailInputLayout">
+        app:layout_constraintTop_toBottomOf="@id/emailInputLayout"
+        app:endIconMode="password_toggle"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary"
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/text_secondary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,6 +92,7 @@
         android:text="@string/login"
         android:textAllCaps="false"
         app:backgroundTint="@color/purple_primary"
+        android:textColor="@color/white"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="@id/passwordInputLayout"
         app:layout_constraintStart_toStartOf="@id/passwordInputLayout"
