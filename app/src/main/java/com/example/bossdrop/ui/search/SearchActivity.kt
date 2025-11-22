@@ -89,7 +89,6 @@ class SearchActivity : AppCompatActivity() {
             val query = textView.text.toString()
 
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                esconderTeclado()
                 viewModel.searchForGame(query)
                 return@setOnEditorActionListener true
             }
@@ -99,6 +98,9 @@ class SearchActivity : AppCompatActivity() {
             }
 
             return@setOnEditorActionListener false
+        }
+        binding.searchRootLayout.setOnClickListener {
+            esconderTeclado()
         }
     }
 

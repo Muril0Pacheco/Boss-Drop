@@ -10,7 +10,7 @@ import com.example.bossdrop.databinding.ActivityNotificationsBinding
 class NotificationsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNotificationsBinding
-    private val userRepository = UserRepository() // Instancia o Repo
+    private val userRepository = UserRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

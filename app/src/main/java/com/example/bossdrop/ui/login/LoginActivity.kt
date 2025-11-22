@@ -11,7 +11,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
-
 import com.example.bossdrop.ui.register.RegisterActivity
 import com.example.bossdrop.ui.forgotpassword.ForgotPasswordActivity
 import com.example.bossdrop.R
@@ -95,7 +94,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         viewModel.isLoading.observe(this) { loading ->
-            // Assumindo que você tem um progressBar no XML
             binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
 
             binding.loginButton.isEnabled = !loading
@@ -135,7 +133,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // ... (registerButton, forgotPasswordTextView, googleSignInButton continuam iguais) ...
         binding.registerButton.setOnClickListener {
             viewModel.goToRegister()
             val intent = Intent(this, RegisterActivity::class.java)
@@ -170,7 +167,6 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
 
-    // ... (signInWithGoogle e navigateToHome continuam iguais) ...
     private fun signInWithGoogle() {
         val signInRequest = com.google.android.gms.auth.api.identity.BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(

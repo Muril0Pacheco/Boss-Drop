@@ -31,13 +31,21 @@
         android:hint="@string/hint_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView">
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/text_secondary"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/usernameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -49,13 +57,21 @@
         android:hint="@string/email"
         app:layout_constraintEnd_toEndOf="@id/usernameInputLayout"
         app:layout_constraintStart_toStartOf="@id/usernameInputLayout"
-        app:layout_constraintTop_toBottomOf="@id/usernameInputLayout">
+        app:layout_constraintTop_toBottomOf="@id/usernameInputLayout"
+
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/text_secondary"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -68,13 +84,21 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="@id/emailInputLayout"
         app:layout_constraintStart_toStartOf="@id/emailInputLayout"
-        app:layout_constraintTop_toBottomOf="@id/emailInputLayout">
+        app:layout_constraintTop_toBottomOf="@id/emailInputLayout"
+
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/text_secondary"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -87,13 +111,21 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="@id/passwordInputLayout"
         app:layout_constraintStart_toStartOf="@id/passwordInputLayout"
-        app:layout_constraintTop_toBottomOf="@id/passwordInputLayout">
+        app:layout_constraintTop_toBottomOf="@id/passwordInputLayout"
+
+        app:boxStrokeColor="@color/box_stroke_color"
+        android:textColorHint="@color/text_secondary"
+        app:hintTextColor="@color/purple_primary"
+        android:textColor="@color/text_primary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/repeatPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -102,6 +134,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
         android:text="@string/cadastrar"
+        android:textColor="#FFFFFF"
         app:backgroundTint="@color/purple_primary"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="@id/repeatPasswordInputLayout"

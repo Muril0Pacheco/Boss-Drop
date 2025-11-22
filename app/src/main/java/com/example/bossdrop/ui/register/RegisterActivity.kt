@@ -28,7 +28,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupTextWatchers() {
-        // Um listener que limpa todos os erros
         val errorCleaner = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -56,7 +55,6 @@ class RegisterActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
             val confirmPassword = binding.repeatPasswordEditText.text.toString()
 
-            esconderTeclado()
             viewModel.register(username, email, password, confirmPassword)
         }
 
@@ -64,6 +62,10 @@ class RegisterActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        binding.registerRootLayout.setOnClickListener {
+            esconderTeclado()
         }
     }
 
