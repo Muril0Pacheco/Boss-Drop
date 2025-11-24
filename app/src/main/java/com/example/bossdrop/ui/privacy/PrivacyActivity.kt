@@ -34,7 +34,7 @@ class PrivacyActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.termsLayout.setOnClickListener {
-            val url = "https://appbossdrop.web.app/"
+            val url = "https://appbossdrop.web.app/terms.html"
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(url)
             startActivity(intent)
