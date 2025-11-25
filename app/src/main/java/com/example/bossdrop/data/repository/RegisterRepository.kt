@@ -8,13 +8,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-class RegisterEmailInUseException(message: String) : Exception(message)
-class RegisterWeakPasswordException(message: String) : Exception(message)
-class RegisterGenericException(message: String) : Exception(message)
-class RegisterRepository {
+class RegisterEmailInUseException(message: String) : RuntimeException(message)
+class RegisterWeakPasswordException(message: String) : RuntimeException(message)
+class RegisterGenericException(message: String) : RuntimeException(message)
+class RegisterRepository(
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+) {
 
-    private val auth = FirebaseAuth.getInstance()
-    private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("users")
 
     /**

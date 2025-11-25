@@ -10,10 +10,11 @@ import com.example.bossdrop.data.repository.FavoriteRepository
 import com.example.bossdrop.data.repository.PromotionRepository
 import kotlinx.coroutines.launch
 
-class GameDetailViewModel : ViewModel() {
+class GameDetailViewModel(
+    private val promotionRepository: PromotionRepository = PromotionRepository(),
+    private val favoriteRepository: FavoriteRepository = FavoriteRepository()
+) : ViewModel() {
 
-    private val promotionRepository = PromotionRepository()
-    private val favoriteRepository = FavoriteRepository()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

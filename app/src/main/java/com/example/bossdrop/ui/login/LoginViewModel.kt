@@ -2,11 +2,10 @@ package com.example.bossdrop.ui.login
 
 import androidx.lifecycle.*
 import com.example.bossdrop.data.repository.LoginRepository
-import kotlinx.coroutines.launch
-
-class LoginViewModel : ViewModel() {
-
-    private val repository = LoginRepository()
+class LoginViewModel(
+    // Injeção: Adicione o repositório no construtor
+    private val repository: LoginRepository = LoginRepository()
+) : ViewModel(){
 
     private val _statusMessage = MutableLiveData<String>()
     val statusMessage: LiveData<String> = _statusMessage

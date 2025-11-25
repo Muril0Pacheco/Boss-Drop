@@ -11,8 +11,7 @@ data class SearchResult(
     val imageUrl: String?
 )
 
-class GameSearchRepository {
-    private val functions = FirebaseFunctions.getInstance()
+class GameSearchRepository(private val functions: FirebaseFunctions = FirebaseFunctions.getInstance()) {
 
     /**
      * Chama a Cloud Function 'searchGames' no backend para buscar jogos na API global.

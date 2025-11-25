@@ -1,3 +1,5 @@
+// ARQUIVO: ui/forgotpassword/ForgotPasswordViewModel.kt
+
 package com.example.bossdrop.ui.forgotpassword
 
 import androidx.lifecycle.LiveData
@@ -7,9 +9,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.bossdrop.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class ForgotPasswordViewModel : ViewModel() {
+class ForgotPasswordViewModel(
+    private val repository: UserRepository = UserRepository()
+) : ViewModel() {
 
-    private val repository = UserRepository()
+    private val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")
+
     private val _statusMessage = MutableLiveData<String>()
     val statusMessage: LiveData<String> = _statusMessage
 
@@ -17,7 +22,7 @@ class ForgotPasswordViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     fun sendResetLink(email: String) {
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isEmpty() || !emailRegex.matches(email)) {
             _statusMessage.value = "Por favor, insira um email válido."
             return
         }

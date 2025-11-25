@@ -8,9 +8,10 @@ import com.example.bossdrop.data.model.FavoriteItem
 import com.example.bossdrop.data.repository.FavoriteRepository
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel : ViewModel() {
-
-    private val favoriteRepository = FavoriteRepository()
+class FavoritesViewModel(
+    // Injeção: Adicione o repositório no construtor
+    private val favoriteRepository: FavoriteRepository = FavoriteRepository()
+) : ViewModel() {
 
     private val _favorites = MutableLiveData<List<FavoriteItem>>()
     val favorites: LiveData<List<FavoriteItem>> = _favorites
@@ -24,12 +25,15 @@ class FavoritesViewModel : ViewModel() {
 
     fun loadFavorites() {
         viewModelScope.launch {
-            _isLoading.value = true
-
-            val items = favoriteRepository.getFavorites()
-
-            _favorites.value = items
-            _isLoading.value = false
+            try {
+                    _isLoading.value = true
+                    val items = favoriteRepository.getFavorites()
+                    _favorites.value = items
+                } catch (e: Exception) {
+                    _favorites.value = emptyList()
+                } finally {
+                    _isLoading.value = false
+            }
+            }
         }
     }
-}

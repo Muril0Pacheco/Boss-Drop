@@ -9,9 +9,10 @@ import com.example.bossdrop.data.model.ItadPromotion
 import com.example.bossdrop.data.repository.PromotionRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
-
-    private val repository = PromotionRepository()
+class HomeViewModel(
+    // Injeção de dependência no construtor
+    private val repository: PromotionRepository = PromotionRepository()
+) : ViewModel(){
 
     private var fullList: List<ItadPromotion> = emptyList()
 

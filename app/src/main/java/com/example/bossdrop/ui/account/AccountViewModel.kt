@@ -1,7 +1,6 @@
 package com.example.bossdrop.ui.account
 
 import android.util.Log
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import com.example.bossdrop.data.repository.UserRepository
 import kotlinx.coroutines.launch
 import com.example.bossdrop.data.repository.EmailUpdateException
 import com.example.bossdrop.data.repository.PasswordUpdateException
-import com.example.bossdrop.data.repository.UsernameUpdateException
 
 // Enum (continua igual)
 enum class SaveResult {
@@ -23,10 +21,11 @@ enum class SaveResult {
     ERROR_GENERIC
 }
 
-class AccountViewModel : ViewModel() {
+class AccountViewModel(
+    private val userRepository: UserRepository = UserRepository()
+) : ViewModel() {
 
-    private val userRepository = UserRepository()
-
+    private val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")
     private val _currentUser = MutableLiveData<User?>()
     val currentUser: LiveData<User?> = _currentUser
 
@@ -57,7 +56,6 @@ class AccountViewModel : ViewModel() {
         val originalUser = _currentUser.value ?: return
 
         if (originalUser.providerId == "google.com") {
-            // FLUXO DO USUÁRIO GOOGLE (Só muda o nome de usuário)
 
             if (newUsername.isNotBlank() && newUsername != originalUser.username) {
                 viewModelScope.launch {
@@ -76,7 +74,6 @@ class AccountViewModel : ViewModel() {
             }
 
         } else {
-            // FLUXO DO USUÁRIO EMAIL/SENHA (Lógica antiga completa)
 
             if (currentPassword.isBlank()) {
                 _saveResult.value = Pair(SaveResult.ERROR_WRONG_PASSWORD, null)
@@ -84,7 +81,7 @@ class AccountViewModel : ViewModel() {
                 return
             }
             if (newEmail.isNotBlank() && newEmail != originalUser.email &&
-                !android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches()) {
+                !emailRegex.matches(newEmail)) {
                 _saveResult.value = Pair(SaveResult.ERROR_INVALID_EMAIL, null)
                 _isLoading.value = false
                 return
@@ -111,7 +108,6 @@ class AccountViewModel : ViewModel() {
                     _saveResult.value = Pair(SaveResult.SUCCESS, null)
 
                 } catch (e: Exception) {
-                    // ... (lógica de catch de erros) ...
                     Log.w("AccountViewModel", "Falha ao salvar: ${e.javaClass.simpleName} - ${e.message}")
                     val errorMsg = e.message ?: "Erro desconhecido"
                     when (e) {

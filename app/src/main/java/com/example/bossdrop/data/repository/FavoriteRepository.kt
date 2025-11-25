@@ -7,14 +7,12 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-class FavoriteRepository {
+class FavoriteRepository(
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance(),
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+) {
 
-    private val db = FirebaseFirestore.getInstance()
-    private val auth = FirebaseAuth.getInstance()
 
-    /**
-     * Adiciona aos favoritos (Visual + Robô)
-     */
     suspend fun addToFavorites(gameId: String, title: String, imageUrl: String?): Boolean {
         val uid = auth.currentUser?.uid ?: return false
 
@@ -46,20 +44,16 @@ class FavoriteRepository {
         }
     }
 
-    /**
-     * Remove dos favoritos (Visual + Robô)
-     */
+
     suspend fun removeFromFavorites(gameId: String): Boolean {
         val uid = auth.currentUser?.uid ?: return false
 
         return try {
-            // 1. Remove da SUB-COLEÇÃO 'wishlist'
             db.collection("users").document(uid)
                 .collection("wishlist")
                 .document(gameId)
                 .delete()
 
-            // 2. Remove do ARRAY 'favoriteGameIds'
             db.collection("users").document(uid)
                 .update("favoriteGameIds", FieldValue.arrayRemove(gameId))
                 .await()
@@ -77,7 +71,6 @@ class FavoriteRepository {
         db.collection("users").document(uid).set(data, com.google.firebase.firestore.SetOptions.merge())
     }
 
-    // ... getFavorites() continua igual ...
     suspend fun getFavorites(): List<FavoriteItem> {
         val uid = auth.currentUser?.uid ?: return emptyList()
         return try {

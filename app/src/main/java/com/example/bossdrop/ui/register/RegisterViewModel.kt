@@ -17,9 +17,10 @@ enum class RegisterResultType {
     ERROR_GENERIC
 }
 
-class RegisterViewModel : ViewModel() {
-
-    private val repository = RegisterRepository()
+class RegisterViewModel(
+    // Injeção de dependência
+    private val repository: RegisterRepository = RegisterRepository()
+) : ViewModel(){
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading

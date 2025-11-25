@@ -10,19 +10,18 @@ import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 
 
-class EmailUpdateException(message: String) : Exception(message)
-class PasswordUpdateException(message: String) : Exception(message)
-class UsernameUpdateException(message: String) : Exception(message)
+class EmailUpdateException(message: String) : RuntimeException(message)
+class PasswordUpdateException(message: String) : RuntimeException(message)
+class UsernameUpdateException(message: String) : RuntimeException(message)
 
-class UserRepository {
-
-    private val auth = FirebaseAuth.getInstance()
-    private val db = FirebaseFirestore.getInstance()
+class UserRepository(
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance(),
+    private val messaging: FirebaseMessaging = FirebaseMessaging.getInstance()
+) {
     private val usersCollection = db.collection("users")
 
-    /**
-     * Busca o objeto User completo (com nome, email e favoritos) do Firestore.
-     */
+
     suspend fun getCurrentUser(): User? {
         val firebaseUser = auth.currentUser
         val uid = firebaseUser?.uid
@@ -50,9 +49,7 @@ class UserRepository {
         }
     }
 
-    /**
-     * Verifica a senha atual do usuário antes de permitir mudanças sensíveis.
-     */
+
     suspend fun reauthenticateUser(currentPassword: String): Boolean {
         val user = auth.currentUser
         val email = user?.email
@@ -107,11 +104,10 @@ class UserRepository {
         } catch (e: Exception) { false }
     }
 
-
     fun updateFcmToken() {
         val uid = auth.currentUser?.uid ?: return
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+        messaging.token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("UserRepository", "Falha ao pegar token FCM", task.exception)
                 return@addOnCompleteListener
@@ -127,9 +123,7 @@ class UserRepository {
                 }
         }
     }
-    /**
-     * Lê a preferência de notificação do usuário
-     */
+
     fun getNotificationPreference(onResult: (Boolean) -> Unit) {
         val uid = auth.currentUser?.uid
         if (uid == null) {
@@ -147,9 +141,6 @@ class UserRepository {
             }
     }
 
-    /**
-     * Salva a preferência de notificação
-     */
     fun updateNotificationPreference(isEnabled: Boolean, onResult: (Boolean) -> Unit) {
         val uid = auth.currentUser?.uid ?: return
 

@@ -23,7 +23,6 @@ fun Activity.esconderTeclado() {
  * Esconde o teclado e limpa o foco.
  */
 fun Fragment.esconderTeclado() {
-    // Um fragment pode não estar ligado a uma activity, então checamos
     val activity = this.activity ?: return
 
     val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager

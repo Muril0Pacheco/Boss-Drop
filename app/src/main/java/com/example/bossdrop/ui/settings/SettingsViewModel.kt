@@ -15,9 +15,10 @@ enum class SettingsNavigation {
     TO_HELP
 }
 
-class SettingsViewModel : ViewModel() {
-
-    private val userRepository = UserRepository() // Instância do repositório de usuário
+class SettingsViewModel(
+    // Injeção: Recebe o repositório no construtor
+    private val userRepository: UserRepository = UserRepository()
+) : ViewModel(){
 
     // 1. Estado (Dados)
     private val _username = MutableLiveData<String>()

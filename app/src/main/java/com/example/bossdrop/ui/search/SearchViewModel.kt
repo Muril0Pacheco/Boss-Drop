@@ -9,9 +9,10 @@ import com.example.bossdrop.data.model.ItadPromotion
 import com.example.bossdrop.data.repository.PromotionRepository
 import kotlinx.coroutines.launch
 
-class SearchViewModel : ViewModel() {
-
-    private val repository = PromotionRepository()
+class SearchViewModel(
+    // Injeção de dependência
+    private val repository: PromotionRepository = PromotionRepository()
+) : ViewModel() {
 
     private var _allDealsCache: List<ItadPromotion> = emptyList()
 

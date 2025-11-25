@@ -5,26 +5,20 @@ import com.example.bossdrop.data.model.ItadPromotion
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-class PromotionRepository {
-
-    private val db = FirebaseFirestore.getInstance()
+class PromotionRepository(private val db: FirebaseFirestore = FirebaseFirestore.getInstance()) {
 
     suspend fun getPromotionsFromFirestore(): List<ItadPromotion> {
         return try {
-            // Chama o Firestore, busca a coleção e espera o resultado
             val snapshot = db.collection("promocoes_br_v3").get().await()
 
-            // Converte cada documento do Firestore automaticamente
-            // para o nosso 'molde' ItadPromotion.
             val promotionList = snapshot.toObjects(ItadPromotion::class.java)
 
             Log.d("PromotionRepository", "Sucesso! ${promotionList.size} promoções carregadas.")
-            promotionList // Retorna a lista
+            promotionList
 
         } catch (e: Exception) {
-            // Se der qualquer erro (ex: sem internet, permissão negada)
             Log.e("PromotionRepository", "Erro ao buscar promoções do Firestore: ${e.message}")
-            emptyList() // Retorna uma lista vazia para o app não quebrar
+            emptyList()
         }
     }
 
@@ -38,11 +32,11 @@ class PromotionRepository {
             } else {
                 Log.w("PromotionRepository", "Jogo com ID $gameId não encontrado.")
             }
-            promotion // Retorna a promoção (ou null se não for encontrada)
+            promotion
 
         } catch (e: Exception) {
             Log.e("PromotionRepository", "Erro ao buscar promoção por ID: ${e.message}")
-            null // Retorna nulo em caso de erro
+            null
         }
     }
 }
