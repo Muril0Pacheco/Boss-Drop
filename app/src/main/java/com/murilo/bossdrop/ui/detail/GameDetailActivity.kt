@@ -151,7 +151,7 @@ class GameDetailActivity : AppCompatActivity() {
             "Epic Game Store" -> R.drawable.epic_games_logo
             "Origin" -> R.drawable.origin_logo
             "EA App" -> R.drawable.ea_app_logo
-            "Green Man Gaming" -> R.drawable.gmg_logo
+            "GreenManGaming" -> R.drawable.gmg_logo
             "Nuuvem" -> R.drawable.nuuvem_logo
             "Microsoft Store" -> R.drawable.microsoft_logo
             else -> R.drawable.ic_store_placeholder
