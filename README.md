@@ -54,3 +54,47 @@ Este projeto foi desenvolvido para resolver o problema da fragmentação de pre�
 * **Integração:** Axios para consumo da API *IsThereAnyDeal*
 
 ---
+## ☁️ Estrutura do Backend (Cloud Functions)
+
+O "cérebro" do BossDrop é um robô (`index.js`) agendado que executa o ciclo ETL (Extract, Transform, Load):
+
+1.  **Coleta:** Identifica jogos populares e varre as listas de desejos de todos os usuários (`wishlist_games`).
+2.  **Consulta:** Busca preços atualizados na API externa para milhares de IDs.
+3.  **Processamento:** Filtra lojas confiáveis (Steam, Nuuvem, Epic, etc.) e unifica os dados.
+4.  **Persistência:** Atualiza a coleção `promocoes_br_v3` no Firestore.
+5.  **Notificação:** Detecta quedas de preço em jogos monitorados e dispara mensagens FCM para os usuários interessados.
+
+---
+
+## 🧪 Relatórios de Testes (QA)
+
+A qualidade do código é garantida através de baterias de testes automatizados. Você pode consultar os relatórios detalhados de execução hospedados no Firebase Hosting:
+
+| Tipo de Teste | Descrição | Resultado (HTML) |
+| :--- | :--- | :--- |
+| **Testes Unitários** | Validação de lógica de ViewModels, Repositórios e utilitários locais. | [📊 Ver Relatório Unitário](https://appbossdrop.web.app/relatorios/unitarios/) |
+| **Testes Instrumentados** | Validação de UI e integração com componentes Android (Contexto real). | [📱 Ver Relatório Instrumentado](https://appbossdrop.web.app/relatorios/instrumentados/) |
+
+---
+
+## 🔒 Configuração e Segurança
+
+### Autenticação e Proteção de Dados
+* **Reautenticação:** Para alterar e-mail ou senha, o app exige que o usuário confirme sua senha atual, prevenindo acesso não autorizado em sessões antigas.
+* **Firebase Identity Platform:** O projeto utiliza a infraestrutura moderna do Google Cloud Identity para gestão de usuários.
+    * *Nota Técnica:* A proteção contra "Enumeração de E-mail" foi desativada intencionalmente no console para permitir a validação de duplicidade de e-mails durante a troca de credenciais pelo próprio usuário.
+
+---
+
+## 👥 Autores
+
+Este projeto foi desenvolvido por:
+
+* **Murilo Pacheco(BackEEnd)**
+* **Pierre de Sá**
+* **Guilherme Augusto**
+* **Italo Lira**
+* **Giovanni Jesus**
+* **Vinicyus Rodrigues**
+
+---
