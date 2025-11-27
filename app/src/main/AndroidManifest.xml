@@ -28,7 +28,7 @@
             android:name=".ui.home.HomeActivity"
             android:exported="false" />
 
-        <activity
+         <activity
             android:name=".ui.search.SearchActivity"
             android:exported="false" />
 

@@ -6,4 +6,6 @@
     <color name="purple_secondary">#2C005A</color>
     <color name="text_secondary">#585858</color>
     <color name="text_primary">#FF000000</color>
+    <color name="bottom_nav_icon_color">@color/purple_primary</color>
+    <color name="bottom_nav_selected_color">@color/purple_primary</color>
 </resources>
