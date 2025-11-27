@@ -10,7 +10,8 @@ O **BossDrop** é um aplicativo Android nativo que monitora e agrega as melhores
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Funcionalidades](#funcionalidades)
 - [Arquitetura e Tecnologias](#arquitetura-e-tecnologias)
-- [Cloud Functions](#cloud-functions) 
+- [Cloud Functions](#cloud-functions)
+- [Estrutura de Dados](#%EF%B8%8F-estrutura-de-dados-firestore)
 - [Relatórios de Testes](#relatórios-de-testes-qa)
 - [Configuração e Segurança](#configuração-e-segurança)
 - [Autores](#autores)
@@ -64,6 +65,16 @@ O "cérebro" do BossDrop é um robô (`index.js`) agendado que executa o ciclo E
 3.  **Processamento:** Filtra lojas confiáveis (Steam, Nuuvem, Epic, etc.) e unifica os dados.
 4.  **Persistência:** Atualiza a coleção `promocoes_br_v3` no Firestore.
 5.  **Notificação:** Detecta quedas de preço em jogos monitorados e dispara mensagens FCM para os usuários interessados.
+
+---
+
+## 🗂️ Estrutura de Dados (Firestore)
+
+O banco de dados foi modelado com foco em performance de leitura e desnormalização para as notificações:
+
+* **`promocoes_br_v3`**: Coleção principal. Armazena os jogos com modelo plano (*Flat Model*) para facilitar o mapeamento no Android. Contém campos como `currentPrice`, `cut` (desconto), `boxart` (imagem vertical) e `shop`.
+* **`users`**: Perfil do usuário. Armazena preferências e um array local de favoritos para acesso rápido na UI.
+* **`wishlist_games`**: Uma "lista invertida" utilizada exclusivamente pelo robô. Cada documento é um Jogo e contém uma lista de IDs de Usuários que desejam ser notificados sobre ele.
 
 ---
 
