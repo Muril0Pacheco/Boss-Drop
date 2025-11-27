@@ -90,7 +90,7 @@ A qualidade do código é garantida através de baterias de testes automatizados
 
 Este projeto foi desenvolvido por:
 
-* **Murilo Pacheco(BackEEnd)**
+* **Murilo Pacheco**
 * **Pierre de Sá**
 * **Guilherme Augusto**
 * **Italo Lira**
