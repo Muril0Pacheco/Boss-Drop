@@ -7,16 +7,17 @@ O **BossDrop** é um aplicativo Android nativo que monitora e agrega as melhores
 ---
 
 ## 📋 Índice
-- [Sobre o Projeto](#-sobre-o-projeto)
-- [Funcionalidades](#-funcionalidades)
-- [Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
-- [Relatórios de Testes](#-relatórios-de-testes-qa)
-- [Configuração e Segurança](#-configuração-e-segurança)
-- [Autores](#-autores)
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Funcionalidades](#funcionalidades)
+- [Arquitetura e Tecnologias](#arquitetura-e-tecnologias)
+- [Cloud Functions](#cloud-functions) 
+- [Relatórios de Testes](#relatórios-de-testes-qa)
+- [Configuração e Segurança](#configuração-e-segurança)
+- [Autores](#autores)
 
 ---
 
-## 🚀 Sobre o Projeto
+## Sobre o Projeto
 
 Este projeto foi desenvolvido para resolver o problema da fragmentação de preços em jogos de PC. Utilizando a API da *IsThereAnyDeal* e um backend serverless no Firebase, o BossDrop mantém uma base de dados atualizada e notifica os usuários proativamente sobre quedas de preço em sua lista de desejos.
 
@@ -24,7 +25,7 @@ Este projeto foi desenvolvido para resolver o problema da fragmentação de pre�
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 * **Feed de Promoções:** Lista curada e atualizada automaticamente com as melhores ofertas do momento, com destaque visual para jogos "Grátis".
 * **Busca Híbrida:** Pesquisa instantânea de jogos na base de dados local (cache) ou externa.
@@ -35,7 +36,7 @@ Este projeto foi desenvolvido para resolver o problema da fragmentação de pre�
 
 ---
 
-## 🛠 Arquitetura e Tecnologias
+## Arquitetura e Tecnologias
 
 ### Android (Cliente)
 * **Linguagem:** Kotlin
@@ -54,7 +55,7 @@ Este projeto foi desenvolvido para resolver o problema da fragmentação de pre�
 * **Integração:** Axios para consumo da API *IsThereAnyDeal*
 
 ---
-## ☁️ Cloud Functions
+## Cloud Functions
 
 O "cérebro" do BossDrop é um robô (`index.js`) agendado que executa o ciclo ETL (Extract, Transform, Load):
 
@@ -66,7 +67,7 @@ O "cérebro" do BossDrop é um robô (`index.js`) agendado que executa o ciclo E
 
 ---
 
-## 🧪 Relatórios de Testes (QA)
+## Relatórios de Testes (QA)
 
 A qualidade do código é garantida através de baterias de testes automatizados. Você pode consultar os relatórios detalhados de execução hospedados no Firebase Hosting:
 
@@ -77,7 +78,7 @@ A qualidade do código é garantida através de baterias de testes automatizados
 
 ---
 
-## 🔒 Configuração e Segurança
+## Configuração e Segurança
 
 ### Autenticação e Proteção de Dados
 * **Reautenticação:** Para alterar e-mail ou senha, o app exige que o usuário confirme sua senha atual, prevenindo acesso não autorizado em sessões antigas.
@@ -86,7 +87,7 @@ A qualidade do código é garantida através de baterias de testes automatizados
 
 ---
 
-## 👥 Autores
+## Autores
 
 Este projeto foi desenvolvido por:
 
