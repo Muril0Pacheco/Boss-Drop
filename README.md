@@ -10,7 +10,7 @@ O **BossDrop** é um aplicativo Android nativo que monitora e agrega as melhores
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Funcionalidades](#-funcionalidades)
 - [Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
-- [Cloud Functions](#-cloud-Functions)
+- [Cloud Functions](#-cloud-functions)
 - [Relatórios de Testes](#-relatórios-de-testes-qa)
 - [Configuração e Segurança](#-configuração-e-segurança)
 - [Autores](#-autores)
