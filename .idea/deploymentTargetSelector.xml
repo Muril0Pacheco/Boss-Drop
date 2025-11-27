@@ -16,10 +16,10 @@
       <SelectionState runConfigName="GameDetailActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="FavoritesActivityTest (1)">
+      <SelectionState runConfigName="SettingsActivityTest (1)">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="SettingsActivityTest (1)">
+      <SelectionState runConfigName="Tests in 'com'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
