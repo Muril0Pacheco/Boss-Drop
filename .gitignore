@@ -1,5 +1,5 @@
 *.iml
-.gradle
+.gradle/
 /local.properties
 /.idea/caches
 /.idea/libraries
@@ -12,5 +12,8 @@
 /captures
 .externalNativeBuild
 .cxx
-local.properties
+
+.env
+*.env
+
 /functions/.env.appbossdrop

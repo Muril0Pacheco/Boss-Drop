@@ -1,7 +1,7 @@
 <resources>
     <!-- Tela inicial -->
     <string name="app_name">BossDrop</string>
-    <string name="default_web_client_id">954946754445-eg4q83qh0ui0i425knqpf9d2vqjocfn3.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">954946754445-7omh9qg45k54um43sgl0t1mvsqafrp35.apps.googleusercontent.com</string>
 
     <string name="email">Email</string>
     <string name="password">Senha</string>

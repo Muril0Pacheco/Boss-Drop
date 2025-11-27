@@ -5,11 +5,11 @@ plugins {
     alias(libs.plugins.google.ksp)}
 
 android {
-    namespace = "com.example.bossdrop"
+    namespace = "com.murilo.bossdrop"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.bossdrop"
+        applicationId = "com.murilo.bossdrop"
         minSdk = 23
         targetSdk = 36
         versionCode = 1
@@ -21,6 +21,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
