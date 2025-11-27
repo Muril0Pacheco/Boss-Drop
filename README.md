@@ -10,9 +10,10 @@ O **BossDrop** é um aplicativo Android nativo que monitora e agrega as melhores
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Funcionalidades](#-funcionalidades)
 - [Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
-- [Estrutura do Backend](#-estrutura-do-backend-cloud-functions)
+- [Cloud Functions](#-cloud-Functions)
 - [Relatórios de Testes](#-relatórios-de-testes-qa)
 - [Configuração e Segurança](#-configuração-e-segurança)
+- [Autores](#-autores)
 
 ---
 
@@ -54,7 +55,7 @@ Este projeto foi desenvolvido para resolver o problema da fragmentação de pre�
 * **Integração:** Axios para consumo da API *IsThereAnyDeal*
 
 ---
-## ☁️ Estrutura do Backend (Cloud Functions)
+## ☁️ Cloud Functions
 
 O "cérebro" do BossDrop é um robô (`index.js`) agendado que executa o ciclo ETL (Extract, Transform, Load):
 
@@ -82,7 +83,7 @@ A qualidade do código é garantida através de baterias de testes automatizados
 ### Autenticação e Proteção de Dados
 * **Reautenticação:** Para alterar e-mail ou senha, o app exige que o usuário confirme sua senha atual, prevenindo acesso não autorizado em sessões antigas.
 * **Firebase Identity Platform:** O projeto utiliza a infraestrutura moderna do Google Cloud Identity para gestão de usuários.
-    * *Nota Técnica:* A proteção contra "Enumeração de E-mail" foi desativada intencionalmente no console para permitir a validação de duplicidade de e-mails durante a troca de credenciais pelo próprio usuário.
+    
 
 ---
 
