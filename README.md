@@ -11,7 +11,7 @@ O **BossDrop** é um aplicativo Android nativo que monitora e agrega as melhores
 - [Funcionalidades](#funcionalidades)
 - [Arquitetura e Tecnologias](#arquitetura-e-tecnologias)
 - [Cloud Functions](#cloud-functions)
-- [Estrutura de Dados](#%EF%B8%8F-estrutura-de-dados-firestore)
+- [Estrutura de Dados](#estrutura-de-dados-firestore)
 - [Relatórios de Testes](#relatórios-de-testes-qa)
 - [Configuração e Segurança](#configuração-e-segurança)
 - [Autores](#autores)
@@ -68,7 +68,7 @@ O "cérebro" do BossDrop é um robô (`index.js`) agendado que executa o ciclo E
 
 ---
 
-## 🗂️ Estrutura de Dados (Firestore)
+## Estrutura de Dados (Firestore)
 
 O banco de dados foi modelado com foco em performance de leitura e desnormalização para as notificações:
 
