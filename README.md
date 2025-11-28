@@ -15,6 +15,7 @@ O **BossDrop** é um aplicativo Android nativo que monitora e agrega as melhores
 - [Relatórios de Testes](#relatórios-de-testes-qa)
 - [Configuração e Segurança](#configuração-e-segurança)
 - [Autores](#autores)
+- [Links Úteis](#links-úteis)
 
 ---
 
@@ -110,3 +111,10 @@ Este projeto foi desenvolvido por:
 * **Vinicyus Rodrigues**
 
 ---
+
+## Links Úteis
+
+Acesse a documentação completa e os termos legais do projeto:
+
+* **[📄 Documentação Completa (Google Docs)](https://docs.google.com/document/d/1lW9qgD1IJ1LSj92fuhMn6Ta77C65GU2kdQd3y4H9PdM/edit?tab=t.0#heading=h.qmnujufey578)** – Detalhes aprofundados sobre regras de negócio e especificações.
+* **[📜 Termos de Uso](https://appbossdrop.web.app/terms.html)** – Termos e condições para utilização do aplicativo.
